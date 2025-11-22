@@ -106,7 +106,22 @@ int main(int argc, char** argv){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    window = glfwCreateWindow(SCR_WIDTH,SCR_HEIGHT, "DemoTemplateOGL", NULL, NULL);
+    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Axolotour", NULL, NULL);
+
+    // Obtener tamaño del monitor principal
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+    // Size de pantalla -100px por lado
+    int winWidth = mode->width - 200;
+    int winHeight = mode->height - 200;
+    glfwSetWindowSize(window, winWidth, winHeight);
+
+    // Calcular centro y mover
+    int posX = (mode->width - winWidth) / 2;
+    int posY = (mode->height - winHeight) / 2;
+    glfwSetWindowPos(window, posX, posY);
+
     glfwMakeContextCurrent(window);
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
         ERRORL("No opengl load", "OPENGL");
@@ -448,16 +463,35 @@ int prepareRenderWindow(HINSTANCE hInstance, int nCmdShow) {
         return 1;
     }
     gladLoadGL();
-    // create window
-    RECT wr = { 0, 0, SCR_WIDTH, SCR_HEIGHT };
+
+    // ---create window---
+    RECT desktop;
+    GetWindowRect(GetDesktopWindow(), &desktop);
+    int screenWidth = desktop.right - desktop.left;
+    int screenHeight = desktop.bottom - desktop.top;
+
+    // Size de la ventana -100px por lado
+    int winWidth = screenWidth - 200;
+    int winHeight = screenHeight - 200;
+
+    // Ajustar incluyendo bordes
+    RECT wr = { 0, 0, winWidth, winHeight };
     AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
-    hWnd = CreateWindow(szWindowClass, szTitle,
+    // Posición centrada
+    int posX = (screenWidth - (wr.right - wr.left)) / 2;
+    int posY = (screenHeight - (wr.bottom - wr.top)) / 2;
+
+    // Creación de la ventana
+    hWnd = CreateWindow(
+        szWindowClass,
+        L"Axolotour",
         WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-        100, 100,
-        wr.right - wr.left, //SCR_WIDTH, 
-        wr.bottom - wr.top, //SCR_HEIGHT,
-        NULL, NULL, hInstance, NULL);
+        posX, posY,
+        wr.right - wr.left,
+        wr.bottom - wr.top,
+        NULL, NULL, hInstance, NULL
+    );
     if (hWnd == NULL) {
         return 1;
     }
