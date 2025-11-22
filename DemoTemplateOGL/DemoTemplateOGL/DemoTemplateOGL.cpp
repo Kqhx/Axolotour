@@ -15,6 +15,7 @@
 #include "Base/model.h"
 #include "Base/Scene.h"
 #include "Scenario.h"
+#include "Lluvia.h"
 #include "Menu.h"
 
 #define MAX_LOADSTRING 100
@@ -157,6 +158,7 @@ int startGameEngine(void *ptrMsg){
         int totFrames = 0;
         double deltasCount = 0;
         double jump = 0;
+        Lluvia lluvia(50.0f, 50.0f, 50.0f, camera);
         prevActions.jump = &jump;
         menu = new Menu(model);
     //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -176,6 +178,8 @@ int startGameEngine(void *ptrMsg){
             bool checkCollition = checkInput(&actions, OGLobj);
             int cambio = OGLobj->update();
             Scene *escena = OGLobj->Render();
+            lluvia.Update();
+            lluvia.Draw();
             if (menuActive){
                 menu->update(menuOption);
                 menu->Render();
