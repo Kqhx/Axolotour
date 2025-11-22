@@ -33,6 +33,8 @@ class Scene {
             angulo = angulo >= 360 ? angulo - 360.0 : angulo;
             setAngulo(angulo);
             getSky()->setRotY(angulo);
+			// Actualizar ciclo día/noche
+			getSky()->update(gameTime.deltaTime / 1000.0f);
             Model* camara = getMainModel();
 			bool perderVida = false;
 			for (int i = 0; i < getLoadedModels()->size(); i++){

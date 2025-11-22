@@ -51,9 +51,21 @@ void Init() {
 
 bool KeysEvents(GameActions *actions){
 	bool checkCollition = false;
+	if (KEYS[input.Escape]){
+		actions->menu = true;
+		KEYS[input.Escape] = false;
+	}
+	if (KEYS[input.Enter]){
+		actions->action = true;
+		KEYS[input.Enter] = false;
+	}
 	if (KEYS[input.P]) {
 		actions->firstPerson = true;
 		KEYS[input.P] = false;
+	}
+	if (KEYS[input.M]) {
+		actions->lockMouse = true;
+		KEYS[input.M] = false;
 	}
 	if (KEYS[input.C]) {
 		actions->displayHitboxStats = !actions->displayHitboxStats;
