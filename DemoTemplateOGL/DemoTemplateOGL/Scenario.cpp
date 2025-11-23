@@ -24,16 +24,17 @@ void Scenario::InitGraph(Model *main) {
 	float matDiff[] = { 1,1,1,1 };
 	angulo = 0;
 	camara = main;
+	ModelAttributes m;
 	//creamos el objeto skydome
     // Orden de texturas: DÍA, TARDE, NOCHE
-    sky = new SkyDome(32, 32, 20,
-        (WCHAR*)L"skydome/day_sky.jpg",      // Textura día
-        (WCHAR*)L"skydome/sunset_sky.jpg",   // Textura tarde
-        (WCHAR*)L"skydome/night_sky.jpg",    // Textura noche
+    sky = new SkyDome(36, 36, 24,
+		(WCHAR*)L"KA/Textures/Terrain/Sky_Day.jpg",   // Textura día
+        (WCHAR*)L"KA/Textures/Terrain/Sky_Dusk.jpg",   // Textura tarde
+		(WCHAR*)L"KA/Textures/Terrain/Sky_Night.jpg",   // Textura noche
         main->cameraDetails,
-        0.0f);  // Inicia en hora 0 (medianoche) para ver ciclo completo
+        1.0f);  // Inicia en hora 0 (medianoche) para ver ciclo completo
 
-/*    std::cout << "\n=== SISTEMA DIA/NOCHE INICIADO ===" << std::endl;
+/*  std::cout << "\n=== SISTEMA DIA/NOCHE INICIADO ===" << std::endl;
     std::cout << "Ciclo completo: 6 minutos (360 segundos)" << std::endl;
     std::cout << "Cada periodo: 2 minutos (120 segundos)" << std::endl;
     std::cout << "NOCHE: 0:00-8:00 (0-120s)" << std::endl;
@@ -41,27 +42,29 @@ void Scenario::InitGraph(Model *main) {
     std::cout << "TARDE: 16:00-24:00 (240-360s)" << std::endl;
     std::cout << "===================================\n" << std::endl;*/
 	//creamos el terreno
-	terreno = new Terreno((WCHAR*)L"skydome/terreno.jpg", (WCHAR*)L"skydome/texterr2.jpg", 400, 400, main->cameraDetails);
-	water = new Water((WCHAR*)L"textures/terreno.bmp", (WCHAR*)L"textures/water.bmp", 20, 20, camara->cameraDetails);
+	terreno = new Terreno((WCHAR*)L"KA/Textures/Terrain/heightmap_JPG.jpg", (WCHAR*)L"KA/Textures/Terrain/texture_terrain_grass1.jpg", 896, 896, main->cameraDetails);
+	water = new Water((WCHAR*)L"KA/Textures/Terrain/terrain_plain.bmp", (WCHAR*)L"KA/Textures/Terrain/texture_water.bmp", 896, 896, camara->cameraDetails);
 	glm::vec3 translate;
 	glm::vec3 scale;
 	glm::vec3 rotation;
-	translate = glm::vec3(0.0f, 20.0f, 30.0f);
+	translate = glm::vec3(0.0f, 11.5f, 0.0f);
+	water->setRotX(180);
 	water->setTranslate(&translate);
+	ourModel.emplace_back(main);
+
+
 	// load models
 	// -----------
-	ourModel.emplace_back(main);
 	Model* model;
-	model = new Model("models/fogata/fogata.obj", main->cameraDetails);
+	model = new Model("KA/Models/Structures/CNTower.fbx", main->cameraDetails);
 	translate = glm::vec3(0.0f, 10.0f, 25.0f);
 	model->setTranslate(&translate);
 	model->setNextTranslate(&translate);
 	rotation = glm::vec3(1.0f, 0.0f, 0.0f); //rotation X
-	model->setNextRotX(45); // 45� rotation
+	model->setNextRotX(-90); // -90º rotation
 	ourModel.emplace_back(model);
 
-	ModelAttributes m;
-	Model *pez = new Model("models/pez/pez.obj", main->cameraDetails);
+	/*Model *pez = new Model("models/pez/pez.obj", main->cameraDetails);
 	translate = glm::vec3(0.0f, terreno->Superficie(0.0f, 50.0f), 50.0f);
 	pez->setNextTranslate(&translate);
 	pez->setTranslate(&translate);
@@ -114,6 +117,7 @@ void Scenario::InitGraph(Model *main) {
 	}catch(...){
 		ERRORL("Could not load animation!", "ANIMACION");
 	}
+
 	model = CollitionBox::GenerateAABB(translate, silly->AABBsize, main->cameraDetails);
 	m.hitbox = model; // Le decimos al ultimo ModelAttribute que tiene un hitbox asignado
 	silly->getModelAttributes()->push_back(m);
@@ -124,6 +128,7 @@ void Scenario::InitGraph(Model *main) {
 	silly->setNextRotY(180, silly->getModelAttributes()->size()-1);
 	silly->setRotY(180, silly->getModelAttributes()->size()-1);
 	// Import model and clone with bones and animations
+
 	model = new Model("models/Silly_Dancing/Silly_Dancing.fbx", main->cameraDetails);
 	translate = glm::vec3(30.0f, terreno->Superficie(30.0f, 60.0f) , 60.0f);
 	scale = glm::vec3(0.02f, 0.02f, 0.02f);	// it's a bit too big for our scene, so scale it down
@@ -140,12 +145,7 @@ void Scenario::InitGraph(Model *main) {
 	*model->getBonesInfo() = *silly->getBonesInfo();
 	model->setAnimator(silly->getAnimator());
 
-	//	model = new Model("models/IronMan.obj", main->cameraDetails);
-//	translate = glm::vec3(0.0f, 20.0f, 30.0f);
-//	scale = glm::vec3(0.025f, 0.025f, 0.025f);	// it's a bit too big for our scene, so scale it down
-//	model->setScale(&scale);
-//	model->setTranslate(&translate);
-//	ourModel.emplace_back(model);
+	
 	model = new Model("models/backpack/backpack.obj", main->cameraDetails, false, false);
 	translate = glm::vec3(20.0f, terreno->Superficie(20.0f, 0.0f) + 2, 0.0f);
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);	// it's a bit too big for our scene, so scale it down
@@ -153,20 +153,22 @@ void Scenario::InitGraph(Model *main) {
 	model->setNextTranslate(&translate);
 	model->setScale(&scale);
 	ourModel.emplace_back(model);
+
 	model->lightColor = glm::vec3(10,0,0);
 	model = new CollitionBox(60.0f, 15.0f, 10.0f, 10, 10, 10, main->cameraDetails);
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);	// it's a bit too big for our scene, so scale it down
 	model->setNextTranslate(model->getTranslate());
 	model->setScale(&scale);
-	ourModel.emplace_back(model);
+	ourModel.emplace_back(model);*/
 	
 
 	inicializaBillboards();
-	std::wstring prueba(L"Esta es una prueba");
+
+	/*std::wstring prueba(L"Esta es una prueba");
 	ourText.emplace_back(new Texto(prueba, 20, 0, 0, SCR_HEIGHT, 0, camara));
 	billBoard2D.emplace_back(new Billboard2D((WCHAR*)L"billboards/awesomeface.png", 6, 6, 100, 200, 0, camara->cameraDetails));
 	scale = glm::vec3(100.0f, 100.0f, 0.0f);	// it's a bit too big for our scene, so scale it down
-	billBoard2D.back()->setScale(&scale);
+	billBoard2D.back()->setScale(&scale);*/
 	}
 
 void Scenario::inicializaBillboards() {

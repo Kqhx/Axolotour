@@ -141,10 +141,10 @@ int startGameEngine(void *ptrMsg){
     //5, ye - 1,-5
     //MainModel *model = new MainModel(hWnd, "models/Cube.obj", translate);
     Camera* camera = Camera::getInstance();
-    Model* model = new Model("models/BaseSpiderman/BaseSpiderman.obj", translate, camera);
+    Model* model = new Model("KA/Models/Axo/Axolotlalli.fbx", translate, camera);
     model->setTranslate(&translate);
     camera->setFront(v);
-    camera->setCharacterHeight(4.0);
+    camera->setCharacterHeight(1.25);
     scale = glm::vec3(1.0f, 1.0f, 1.0f);	// it's a bit too big for our scene, so scale it down
     model->setScale(&scale);
     model->setTranslate(&translate);
