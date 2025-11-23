@@ -349,6 +349,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
                 window_size_callback(&hWnd, width, height);
             }
         } break;
+        case WM_SETFOCUS: {
+            lockMouse = true;
+            changeLockingMouse();
+            break;
+        }
+        case WM_KILLFOCUS: {
+            lockMouse = false;
+            changeLockingMouse();
+            break;
+        }
         case WM_LBUTTONDOWN: {
             cDelta.setLbtn(true);
         }break;
@@ -636,7 +646,9 @@ void mouseActions() {
     double x, y;
     if (!lockMouse)
         return;
-#ifdef _WIN32 
+#ifdef _WIN32
+    if (GetForegroundWindow() != hWnd)
+        return;
     POINT p;
     GetCursorPos(&p);
     x = (int)p.x;
@@ -784,21 +796,25 @@ void updateFPS(Texto *fps, int totFrames){
 }
 
 void changeLockingMouse() {
+#ifdef _WIN32
     if (lockMouse) {
-#ifdef _WIN32 
-        window_size_callback(&hWnd, SCR_WIDTH, SCR_HEIGHT);
-#else
-        window_size_callback(window, SCR_WIDTH, SCR_HEIGHT);
-#endif
-    } else {
-#ifdef _WIN32 
-        CURSORINFO cursor{ 0 };
-        GetCursorInfo(&cursor);
-        if (cursor.flags != CURSOR_SHOWING)
-            while (ShowCursor(TRUE) == CURSOR_SHOWING);
-        ClipCursor(NULL);
-#else
-        glfwSetInputMode((GLFWwindow*)window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-#endif
+        RECT rect;
+        GetClientRect(hWnd, &rect);
+        POINT tl = { rect.left, rect.top };
+        POINT br = { rect.right, rect.bottom };
+        ClientToScreen(hWnd, &tl);
+        ClientToScreen(hWnd, &br);
+        rect.left = tl.x;
+        rect.top = tl.y;
+        rect.right = br.x;
+        rect.bottom = br.y;
+
+        ClipCursor(&rect);
+        while (ShowCursor(FALSE) >= 0);
     }
+    else {
+        ClipCursor(NULL);
+        while (ShowCursor(TRUE) < 0);
+    }
+#endif
 }
