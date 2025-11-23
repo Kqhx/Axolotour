@@ -36,7 +36,7 @@ public:
 	Scenario(Model *camIni);
 	void InitGraph(Model *main);
 
-	void inicializaBillboards();
+	//void inicializaBillboards();
 
 	//el metodo render toma el dispositivo sobre el cual va a dibujar
 	//y hace su tarea ya conocida

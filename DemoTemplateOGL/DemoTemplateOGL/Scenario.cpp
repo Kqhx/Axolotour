@@ -63,7 +63,29 @@ void Scenario::InitGraph(Model *main) {
 	rotation = glm::vec3(1.0f, 0.0f, 0.0f); //rotation X
 	model->setNextRotX(-90); // -90º rotation
 	ourModel.emplace_back(model);
+	
 
+	//Load world borders
+	Model* worldBorder = new CollitionBox(0.0f, 0.0f, 448.0f, 448.0f, 50.0f, 10.0f, main->cameraDetails);
+	worldBorder->setRotY(0);
+	worldBorder->setNextRotY(0);
+	ourModel.emplace_back(worldBorder);
+	worldBorder = new CollitionBox(448.0f, 0.0f, 0.0f, 448.0f, 50.0f, 10.0f, main->cameraDetails);
+	worldBorder->setRotY(90);
+	worldBorder->setNextRotY(90);
+	ourModel.emplace_back(worldBorder);
+	worldBorder = new CollitionBox(0.0f, 0.0f, -448.0f, 448.0f, 50.0f, 10.0f, main->cameraDetails);
+	worldBorder->setRotY(0);
+	worldBorder->setNextRotY(0);
+	ourModel.emplace_back(worldBorder);
+	worldBorder = new CollitionBox(-448.0f, 0.0f, 0.0f, 448.0f, 50.0f, 10.0f, main->cameraDetails);
+	worldBorder->setRotY(90);
+	worldBorder->setNextRotY(90);
+	ourModel.emplace_back(worldBorder);
+
+
+	//PLANTILLA:
+	//inicializaBillboards();
 	/*Model *pez = new Model("models/pez/pez.obj", main->cameraDetails);
 	translate = glm::vec3(0.0f, terreno->Superficie(0.0f, 50.0f), 50.0f);
 	pez->setNextTranslate(&translate);
@@ -159,19 +181,16 @@ void Scenario::InitGraph(Model *main) {
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);	// it's a bit too big for our scene, so scale it down
 	model->setNextTranslate(model->getTranslate());
 	model->setScale(&scale);
-	ourModel.emplace_back(model);*/
-	
+	ourModel.emplace_back(model);
 
-	inicializaBillboards();
-
-	/*std::wstring prueba(L"Esta es una prueba");
+	std::wstring prueba(L"Esta es una prueba");
 	ourText.emplace_back(new Texto(prueba, 20, 0, 0, SCR_HEIGHT, 0, camara));
 	billBoard2D.emplace_back(new Billboard2D((WCHAR*)L"billboards/awesomeface.png", 6, 6, 100, 200, 0, camara->cameraDetails));
 	scale = glm::vec3(100.0f, 100.0f, 0.0f);	// it's a bit too big for our scene, so scale it down
 	billBoard2D.back()->setScale(&scale);*/
 	}
 
-void Scenario::inicializaBillboards() {
+/*void Scenario::inicializaBillboards() {
 	float ye = terreno->Superficie(0, 0) + 3;
 	Billboard *arbol = new Billboard((WCHAR*)L"billboards/Arbol.png", 6, 6, 0, ye, 0, camara->cameraDetails);
 	billBoard.emplace_back(arbol);
@@ -202,7 +221,7 @@ void Scenario::inicializaBillboards() {
 		billBoardAnimated->pushFrame(new Billboard((WCHAR*)textura, 6, 6, 5, ye, -5, camara->cameraDetails));		
 	}
 	billBoardAnim.emplace_back(billBoardAnimated);
-}
+}*/
 
 	//el metodo render toma el dispositivo sobre el cual va a dibujar
 	//y hace su tarea ya conocida
