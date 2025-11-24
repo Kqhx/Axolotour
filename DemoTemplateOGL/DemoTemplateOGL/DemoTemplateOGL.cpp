@@ -159,7 +159,8 @@ int startGameEngine(void *ptrMsg){
     Texto *coordenadas = NULL;
     try{
         OGLobj = new Scenario(model); // Creamos nuestra escena con esa posicion de inicio
-        translate = glm::vec3(5.0f, OGLobj->getTerreno()->Superficie(5.0, -5.0), -5.0f);
+        translate = glm::vec3(-150.0f, OGLobj->getTerreno()->Superficie(-150.0, -185.0), -185.0f);
+        model->setRotY(30);
         model->setTranslate(&translate);
         model->setNextTranslate(&translate);
         renderiza = false;

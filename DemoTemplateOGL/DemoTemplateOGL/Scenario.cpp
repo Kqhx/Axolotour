@@ -24,66 +24,195 @@ void Scenario::InitGraph(Model *main) {
 	float matDiff[] = { 1,1,1,1 };
 	angulo = 0;
 	camara = main;
+	Model* model;
 	ModelAttributes m;
-	//creamos el objeto skydome
-    // Orden de texturas: DÍA, TARDE, NOCHE
+	
+
+	// -------------------------------
+	// -----     LOAD SKYBOX     -----
+	// -------------------------------
     sky = new SkyDome(36, 36, 24,
 		(WCHAR*)L"KA/Textures/Terrain/Sky_Day.jpg",   // Textura día
         (WCHAR*)L"KA/Textures/Terrain/Sky_Dusk.jpg",   // Textura tarde
 		(WCHAR*)L"KA/Textures/Terrain/Sky_Night.jpg",   // Textura noche
         main->cameraDetails,
-        1.0f);  // Inicia en hora 0 (medianoche) para ver ciclo completo
-
+        8.0f);  // Inicia en hora 0 (medianoche) para ver ciclo completo
 /*  std::cout << "\n=== SISTEMA DIA/NOCHE INICIADO ===" << std::endl;
     std::cout << "Ciclo completo: 6 minutos (360 segundos)" << std::endl;
     std::cout << "Cada periodo: 2 minutos (120 segundos)" << std::endl;
-    std::cout << "NOCHE: 0:00-8:00 (0-120s)" << std::endl;
-    std::cout << "DIA: 8:00-16:00 (120-240s)" << std::endl;
-    std::cout << "TARDE: 16:00-24:00 (240-360s)" << std::endl;
+    std::cout << "DIA: 0:00-8:00 (0-120s)" << std::endl;
+    std::cout << "TARDE: 8:00-16:00 (120-240s)" << std::endl;
+    std::cout << "NOCHE: 16:00-24:00 (240-360s)" << std::endl;
     std::cout << "===================================\n" << std::endl;*/
-	//creamos el terreno
-	terreno = new Terreno((WCHAR*)L"KA/Textures/Terrain/heightmap_JPG.jpg", (WCHAR*)L"KA/Textures/Terrain/texture_terrain_grass1.jpg", 896, 896, main->cameraDetails);
-	water = new Water((WCHAR*)L"KA/Textures/Terrain/terrain_plain.bmp", (WCHAR*)L"KA/Textures/Terrain/texture_water.bmp", 896, 896, camara->cameraDetails);
-	glm::vec3 translate;
-	glm::vec3 scale;
-	glm::vec3 rotation;
+
+
+	// -------------------------------
+	// -----    LOAD TERRAINS    -----
+	// -------------------------------
+	terreno = new Terreno((WCHAR*)L"KA/Textures/Terrain/heightmap_JPG.jpg", (WCHAR*)L"KA/Textures/Terrain/texture_terrain_grass1.jpg", 800, 800, main->cameraDetails);
+	water = new Water((WCHAR*)L"KA/Textures/Terrain/terrain_plain.bmp", (WCHAR*)L"KA/Textures/Terrain/texture_water.bmp", 800, 800, camara->cameraDetails);
+	glm::vec3 translate, scale, rotation;
 	translate = glm::vec3(0.0f, 11.5f, 0.0f);
 	water->setRotX(180);
 	water->setTranslate(&translate);
 	ourModel.emplace_back(main);
 
 
-	// load models
-	// -----------
-	Model* model;
-	model = new Model("KA/Models/Structures/CNTower.fbx", main->cameraDetails);
-	translate = glm::vec3(0.0f, 10.0f, 25.0f);
+	// -------------------------------
+	// -----     LOAD MODELS     -----
+	// -------------------------------
+	// BOTE
+	model = new Model("KA/Models/Vehicles/boat.fbx", main->cameraDetails);
+	translate = glm::vec3(-205.0f, 11.0f, -260.0f);
 	model->setTranslate(&translate);
 	model->setNextTranslate(&translate);
-	rotation = glm::vec3(1.0f, 0.0f, 0.0f); //rotation X
-	model->setNextRotX(-90); // -90º rotation
+	model->walkeable = false;
+	scale = glm::vec3(5.0f, 5.0f, 5.0f);	// it's a bit too big for our scene, so scale it down
+	model->setScale(&scale);
+	model->setNextRotY(180);
 	ourModel.emplace_back(model);
+
+	// PYRAMID
+	float y_pyramid = terreno->Superficie(165, -240) - 5;
+	Model *pyr= new Model("KA/Models/Structures/PyramidInside.fbx", main->cameraDetails);
+	translate = glm::vec3(165.0f, y_pyramid, -240.0f);
+	pyr->ignoreAABB = true;
+	pyr->walkeable = false;
+	pyr->setTranslate(&translate);
+	pyr->setNextTranslate(&translate);
+	scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	pyr->setScale(&scale);
+	pyr->setNextRotY(45);
+	for (auto& attr : *pyr->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(pyr);
+	pyr = new Model("KA/Models/Structures/PyramidOutside.fbx", main->cameraDetails);
+	pyr->ignoreAABB = true;
+	pyr->walkeable = false;
+	pyr->setTranslate(&translate);
+	pyr->setNextTranslate(&translate);
+	for (auto& attr : *pyr->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(pyr);
+
+	// ANGEL
+	placeModelAngel(main);
+
+
+	// TULA
+	float y_tula = terreno->Superficie(170, -130);
+	Model* tula = new Model("KA/Models/Structures/Tula.fbx", main->cameraDetails);
+	translate = glm::vec3(170.0f, y_tula, -130.0f);
+	tula->setTranslate(&translate);
+	tula->setNextTranslate(&translate);
+	scale = glm::vec3(2.0f, 2.0f, 2.0f);	// it's a bit too big for our scene, so scale it down
+	tula->setScale(&scale);
+	//for (auto& attr : *tula->getModelAttributes()) {
+	//	attr.hitbox = NULL;
+	//}
+	ourModel.emplace_back(tula);
+
+	// LIBERTY
+	float y_liberty = terreno->Superficie(-200, 250) + 15;
+	Model* liberty = new Model("KA/Models/Structures/LibertyStatue.fbx", main->cameraDetails);
+	translate = glm::vec3(-200.0f, y_liberty, 250.0f);
+	liberty->setTranslate(&translate);
+	liberty->setNextTranslate(&translate);
+	scale = glm::vec3(6.0f, 6.0f, 6.0f);
+	liberty->setScale(&scale);
+	//for (auto& attr : *liberty->getModelAttributes()) {
+	//	attr.hitbox = NULL;
+	//}
+	ourModel.emplace_back(liberty);
+
+	// CNTOWER
+	float y_cntower = terreno->Superficie(0, 180)-3;
+	Model* tower = new Model("KA/Models/Structures/CNTower.fbx", main->cameraDetails);
+	translate = glm::vec3(0.0f, y_cntower, 180.0f);
+	tower->setTranslate(&translate);
+	tower->setNextTranslate(&translate);
+	scale = glm::vec3(4.0f, 4.0f, 4.0f);
+	tower->setScale(&scale);
+	tower->setNextRotX(-90);
+	//for (auto& attr : *tower->getModelAttributes()) {
+	//	attr.hitbox = NULL;
+	//}
+	ourModel.emplace_back(tower);
+
+	// STADIUM
+	float y_stadium = terreno->Superficie(250, 200) - 50;
+	Model* stadium = new Model("KA/Models/Structures/stadium.obj", main->cameraDetails);
+	translate = glm::vec3(250, y_stadium, 200.0f);
+	stadium->setTranslate(&translate);
+	stadium->setNextTranslate(&translate);
+	scale = glm::vec3(5.0f, 7.0f, 5.0f);
+	stadium->setScale(&scale);
+	ourModel.emplace_back(stadium);
+
+
+	// -------------------------------
+	// -----   LOAD BILLBOARDS   -----
+	// -------------------------------
+	// Letrero Bienvenida
+	float y_sign = terreno->Superficie(-140, -180) + 1;
+	billBoard.emplace_back( new Billboard((WCHAR*)L"KA/Billboards/Signs/Welcome.png", 3, 3, -140, y_sign, -180, camara->cameraDetails)
+	);
+
+	// árbol 1
+	float y_tree = terreno->Superficie(10, 15);
+	Billboard* arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree1.png", 12, 12, 10, y_tree+5, 15, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+	// árbol 2
+	y_tree = terreno->Superficie(22, -14);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree2.png", 12, 12, 22, y_tree+5, -14, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+	// árbol 3
+	y_tree = terreno->Superficie(-5, -15);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree3.png", 12, 12, -5, y_tree+5, -15, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+	// árbol 4
+	y_tree = terreno->Superficie(-15, 0);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree4.png", 12, 12, -15, y_tree+5, 0, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+	// árbol 5
+	y_tree = terreno->Superficie(0, 5);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree5.png", 12, 12, 0, y_tree+5, 5, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+	// Map
+	billBoard2D.emplace_back(new Billboard2D((WCHAR*)L"KA/Billboards/Map.png", 12, 12, 1920-250, 250, 0, camara->cameraDetails));
+	scale = glm::vec3(450.0f, 450.0f, 0.0f);	// it's a bit too big for our scene, so scale it down
+	billBoard2D.back()->setScale(&scale);
+
+
+	// -------------------------------
+	// -----  LOAD WORLDBORDERS  -----
+	// -------------------------------
+	Model* worldBorder = new CollitionBox(0.0f, 0.0f, 400.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
+	worldBorder->setRotY(0);
+	worldBorder->setNextRotY(0);
+	ourModel.emplace_back(worldBorder);
+	worldBorder = new CollitionBox(400.0f, 0.0f, 0.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
+	worldBorder->setRotY(90);
+	worldBorder->setNextRotY(90);
+	ourModel.emplace_back(worldBorder);
+	worldBorder = new CollitionBox(0.0f, 0.0f, -400.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
+	worldBorder->setRotY(0);
+	worldBorder->setNextRotY(0);
+	ourModel.emplace_back(worldBorder);
+	worldBorder = new CollitionBox(-400.0f, 0.0f, 0.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
+	worldBorder->setRotY(90);
+	worldBorder->setNextRotY(90);
+	ourModel.emplace_back(worldBorder);
+
+
+	// -------------------------------
+	// -----    LOAD HITBOXES    -----
+	// -------------------------------
 	
 
-	//Load world borders
-	Model* worldBorder = new CollitionBox(0.0f, 0.0f, 448.0f, 448.0f, 50.0f, 10.0f, main->cameraDetails);
-	worldBorder->setRotY(0);
-	worldBorder->setNextRotY(0);
-	ourModel.emplace_back(worldBorder);
-	worldBorder = new CollitionBox(448.0f, 0.0f, 0.0f, 448.0f, 50.0f, 10.0f, main->cameraDetails);
-	worldBorder->setRotY(90);
-	worldBorder->setNextRotY(90);
-	ourModel.emplace_back(worldBorder);
-	worldBorder = new CollitionBox(0.0f, 0.0f, -448.0f, 448.0f, 50.0f, 10.0f, main->cameraDetails);
-	worldBorder->setRotY(0);
-	worldBorder->setNextRotY(0);
-	ourModel.emplace_back(worldBorder);
-	worldBorder = new CollitionBox(-448.0f, 0.0f, 0.0f, 448.0f, 50.0f, 10.0f, main->cameraDetails);
-	worldBorder->setRotY(90);
-	worldBorder->setNextRotY(90);
-	ourModel.emplace_back(worldBorder);
-
-
+	
 	//PLANTILLA:
 	//inicializaBillboards();
 	/*Model *pez = new Model("models/pez/pez.obj", main->cameraDetails);
@@ -188,6 +317,84 @@ void Scenario::InitGraph(Model *main) {
 	billBoard2D.emplace_back(new Billboard2D((WCHAR*)L"billboards/awesomeface.png", 6, 6, 100, 200, 0, camara->cameraDetails));
 	scale = glm::vec3(100.0f, 100.0f, 0.0f);	// it's a bit too big for our scene, so scale it down
 	billBoard2D.back()->setScale(&scale);*/
+	}
+
+	void Scenario::placeModelAngel(Model* main)
+	{
+		float y_angel = terreno->Superficie(260, -200);
+		Model* angel = new Model("KA/Models/Structures/IndependenceAngel.fbx", main->cameraDetails);
+		glm::vec3 translate = glm::vec3(260.0f, y_angel, -200.0f);
+		angel->setTranslate(&translate);
+		angel->setNextTranslate(&translate);
+		glm::vec3 scale = glm::vec3(2.0f, 2.0f, 2.0f);	// it's a bit too big for our scene, so scale it down
+		angel->setScale(&scale);
+		for (auto& attr : *angel->getModelAttributes()) {
+			attr.hitbox = NULL;
+		}
+		ourModel.emplace_back(angel);
+		translate = glm::vec3(260.0f, y_angel + 0.25, -200.0f);
+		int hitboxrot = 0;
+
+		Model* hitBox = new CollitionBox(translate.x, translate.y, translate.z, 6.0f, 60.0f, 6.0f, main->cameraDetails);
+		hitBox->setRotY(45);
+		hitBox->setNextRotY(45);
+		hitBox->walkeable = false;
+		ourModel.emplace_back(hitBox);
+
+		for (int i = 1; i <= 180; i++) {
+			hitBox->walkeable = true;
+			hitBox = new CollitionBox(translate.x, translate.y, translate.z, 30.0f, 0.5f, 1.0f, main->cameraDetails);
+			hitBox->setRotY(hitboxrot);
+			hitBox->setNextRotY(hitboxrot);
+			ourModel.emplace_back(hitBox);
+
+			hitBox = new CollitionBox(translate.x, translate.y, translate.z, 24.0f, 2.5f, 1.0f, main->cameraDetails);
+			hitBox->setRotY(hitboxrot);
+			hitBox->setNextRotY(hitboxrot);
+			ourModel.emplace_back(hitBox);
+			hitboxrot += 2;
+		}
+
+		hitBox->walkeable = false;
+		hitBox = new CollitionBox(260, translate.y + 5, -175, 1.5f, 10.0f, 1.5f, main->cameraDetails);
+		hitBox->setRotY(45);
+		hitBox->setNextRotY(45);
+		ourModel.emplace_back(hitBox);
+
+		hitBox = new CollitionBox(260, translate.y + 10, -187, 2.0f, 6.0f, 2.8f, main->cameraDetails);
+		hitBox->setRotY(0);
+		hitBox->setNextRotY(0);
+		ourModel.emplace_back(hitBox);
+
+		hitBox = new CollitionBox(260, translate.y + 5, -225, 1.5f, 10.0f, 1.5f, main->cameraDetails);
+		hitBox->setRotY(-45);
+		hitBox->setNextRotY(-45);
+		ourModel.emplace_back(hitBox);
+
+		hitBox = new CollitionBox(260, translate.y + 10, -213, 2.0f, 6.0f, 2.8f, main->cameraDetails);
+		hitBox->setRotY(0);
+		hitBox->setNextRotY(0);
+		ourModel.emplace_back(hitBox);
+
+		hitBox = new CollitionBox(235, translate.y + 5, -200, 1.5f, 10.0f, 1.5f, main->cameraDetails);
+		hitBox->setRotY(-45);
+		hitBox->setNextRotY(-45);
+		ourModel.emplace_back(hitBox);
+
+		hitBox = new CollitionBox(247, translate.y + 10, -200, 2.0f, 6.0f, 2.8f, main->cameraDetails);
+		hitBox->setRotY(0);
+		hitBox->setNextRotY(0);
+		ourModel.emplace_back(hitBox);
+
+		hitBox = new CollitionBox(285, translate.y + 5, -200, 1.5f, 10.0f, 1.5f, main->cameraDetails);
+		hitBox->setRotY(45);
+		hitBox->setNextRotY(45);
+		ourModel.emplace_back(hitBox);
+
+		hitBox = new CollitionBox(273, translate.y + 10, -200, 2.0f, 6.0f, 2.8f, main->cameraDetails);
+		hitBox->setRotY(0);
+		hitBox->setNextRotY(0);
+		ourModel.emplace_back(hitBox);
 	}
 
 /*void Scenario::inicializaBillboards() {

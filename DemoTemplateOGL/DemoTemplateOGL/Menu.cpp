@@ -33,7 +33,7 @@ void Menu::InitGraph(Camera *camara){
 
     // --- Creamos el menú centrado (pivote en centro)
     billBoard2D.push_back(
-        new Billboard2D((WCHAR*)L"KA/GUI/GamePause.png", 6, 6, centerX, centerY, 0, camara)
+        new Billboard2D((WCHAR*)L"KA/GUI/Menus/GamePause.png", 6, 6, centerX, centerY, 0, camara)
     );
     scale = glm::vec3(menuW, menuH, 0.0f);
     billBoard2D.back()->setScale(&scale);

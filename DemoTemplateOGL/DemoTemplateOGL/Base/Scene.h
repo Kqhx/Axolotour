@@ -52,13 +52,13 @@ class Scene {
 						collider = (Model*)mcollider.model;
 						idxCollider = mcollider.attrIdx;
 					}
-					if (collider != NULL && model == camara){
-						if (ejeColision.y == 1){
-							INFO("APLASTADO!!!! " + collider->name, "JUMP HITBOX_"+to_string(idxCollider));
-							if (removeCollideModel(collider, idxCollider))
-								i--;
-						}
-					}
+					//if (collider != NULL && model == camara){
+					//	if (ejeColision.y == 1){
+					//		//INFO("APLASTADO!!!! " + collider->name, "JUMP HITBOX_"+to_string(idxCollider));
+					//		//if (removeCollideModel(collider, idxCollider))
+					//		//	i--;
+					//	}
+					//}
 					if (j < 0) j = 0;
 				}
 				if (i < 0) i = 0;

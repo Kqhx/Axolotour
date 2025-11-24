@@ -20,10 +20,10 @@ private:
 	Billboard2D* oxygenBarTop;
 	Billboard2D* puntosBarBot;
 	Billboard2D* puntosBarTop;
-	Billboard2D* gameStartBillboard;
 	Billboard2D* gameOverBillboard;
-	bool gameStartVisible = false;
+	Billboard2D* gameWinBillboard;
 	bool gameOverVisible = false;
+	bool gameWinVisible = false;
 
 public:
 	Axolotl() {
@@ -32,8 +32,8 @@ public:
 		showOX();
 		showPT();
 		initTextDisplay();
-		gameStart();
 		gameOver();
+		gameWin();
 	}
 	Axolotl(vector<Vertex>& vertices, unsigned int numVertices, vector<unsigned int>& indices, unsigned int numIndices, Camera* camera)
 		: Model(vertices, numVertices, indices, numIndices, camera) {
@@ -42,8 +42,8 @@ public:
 		showOX();
 		showPT();
 		initTextDisplay();
-		gameStart();
 		gameOver();
+		gameWin();
 	}
 	Axolotl(string const& path, glm::vec3& actualPosition, Camera* cam, bool rotationX = false, bool rotationY = true, bool gamma = false)
 		: Model(path, actualPosition, cam, rotationX, rotationY, gamma) {
@@ -52,8 +52,8 @@ public:
 		showOX();
 		showPT();
 		initTextDisplay();
-		gameStart(); 
 		gameOver();
+		gameWin();
 	}
 	Axolotl(string const& path, Camera* camera, bool rotationX = false, bool rotationY = true, bool gamma = false)
 		: Model(path, camera, rotationX, rotationY, gamma) {
@@ -62,8 +62,8 @@ public:
 		showOX();
 		showPT();
 		initTextDisplay();
-		gameStart();
 		gameOver();
+		gameWin();
 	}
 
 	//Getters and Setters
@@ -105,7 +105,7 @@ public:
 		int heartposx = 100;
 
 		for (int i = 0; i < vidas; i++) {
-			hearts.emplace_back(new Billboard2D((WCHAR*)L"KA/GUI/Axo.png", 2, 2, heartposx, 100, 0, this->cameraDetails));
+			hearts.emplace_back(new Billboard2D((WCHAR*)L"KA/Billboards/Axo.png", 2, 2, heartposx, 100, 0, this->cameraDetails));
 			scale = glm::vec3(125.0f, 125.0f, 0.0f);
 			hearts.back()->setScale(&scale);
 			heartposx += 125;
@@ -113,24 +113,24 @@ public:
 	}
 	void showHP() {
 		glm::vec3 hpscale;
-		healthBarBot = new Billboard2D((WCHAR*)L"KA/GUI/Graybar.png", 2, 2, 220, 200, 0, this->cameraDetails);
-		healthBarTop = new Billboard2D((WCHAR*)L"KA/GUI/HPbar.png", 2, 2, 220, 200, 0, this->cameraDetails);
+		healthBarBot = new Billboard2D((WCHAR*)L"KA/GUI/Bars/Graybar.png", 2, 2, 220, 200, 0, this->cameraDetails);
+		healthBarTop = new Billboard2D((WCHAR*)L"KA/GUI/Bars/HPbar.png", 2, 2, 220, 200, 0, this->cameraDetails);
 		hpscale = glm::vec3(320.0f, 32.0f, 0.0f);
 		healthBarBot->setScale(&hpscale);
 		healthBarTop->setScale(&hpscale);
 	}
 	void showOX() {
 		glm::vec3 oxscale;
-		oxygenBarBot = new Billboard2D((WCHAR*)L"KA/GUI/Graybar.png", 2, 2, 220, 250, 0, this->cameraDetails);
-		oxygenBarTop = new Billboard2D((WCHAR*)L"KA/GUI/OXbar.png", 2, 2, 220, 250, 0, this->cameraDetails);
+		oxygenBarBot = new Billboard2D((WCHAR*)L"KA/GUI/Bars/Graybar.png", 2, 2, 220, 250, 0, this->cameraDetails);
+		oxygenBarTop = new Billboard2D((WCHAR*)L"KA/GUI/Bars/OXbar.png", 2, 2, 220, 250, 0, this->cameraDetails);
 		oxscale = glm::vec3(320.0f, 32.0f, 0.0f);
 		oxygenBarBot->setScale(&oxscale);
 		oxygenBarTop->setScale(&oxscale);
 	}
 	void showPT() {
 		glm::vec3 ptscale1, ptscale2;
-		puntosBarBot = new Billboard2D((WCHAR*)L"KA/GUI/Graybar.png", 2, 2, ((SCR_WIDTH+200) / 2), 40, 0, this->cameraDetails);
-		puntosBarTop = new Billboard2D((WCHAR*)L"KA/GUI/PTbar.png", 2, 2, ((SCR_WIDTH+200) / 2), 40, 0, this->cameraDetails);
+		puntosBarBot = new Billboard2D((WCHAR*)L"KA/GUI/Bars/Graybar.png", 2, 2, ((SCR_WIDTH + 200) / 2), 40, 0, this->cameraDetails);
+		puntosBarTop = new Billboard2D((WCHAR*)L"KA/GUI/Bars/PTbar.png", 2, 2, ((SCR_WIDTH+200) / 2), 40, 0, this->cameraDetails);
 		ptscale1 = glm::vec3(320.0f, 32.0f, 0.0f);
 		ptscale2 = glm::vec3(0.0f, 32.0f, 0.0f);
 		puntosBarBot->setScale(&ptscale1);
@@ -187,7 +187,7 @@ public:
 
 	void updatePT() {
 		//Calculate progress percentage
-		float ptPercent = puntos / 4.0f;
+		float ptPercent = puntos / 6.0f;
 		glm::vec3 scale = glm::vec3(320.0f * ptPercent, 32.0f, 0.0f);
 		puntosBarTop->setScale(&scale);
 		updatePTDisplay();
@@ -254,24 +254,24 @@ public:
 		}
 	}
 
-	void gameStart() {
-		gameStartBillboard = new Billboard2D((WCHAR*)L"KA/GUI/GameStart.png", 2, 2, (SCR_WIDTH - 200) / 2, (SCR_HEIGHT - 200) / 2, 0, this->cameraDetails); // Centered on screen
-		glm::vec3 scale = glm::vec3(1920.0f, 1080.0f, 0.0f);
-		gameStartBillboard->setScale(&scale);
-	}
-
 	void gameOver() {
-		gameOverBillboard = new Billboard2D((WCHAR*)L"KA/GUI/GameOver.png", 2, 2, (SCR_WIDTH - 200) / 2, (SCR_HEIGHT - 200) / 2, 0, this->cameraDetails); // Centered on screen
+		gameOverBillboard = new Billboard2D((WCHAR*)L"KA/GUI/Menus/GameOver.png", 2, 2, (SCR_WIDTH - 200) / 2, (SCR_HEIGHT - 200) / 2, 0, this->cameraDetails); // Centered on screen
 		glm::vec3 scale = glm::vec3(1920.0f, 1080.0f, 0.0f);
 		gameOverBillboard->setScale(&scale);
+	}
+
+	void gameWin() {
+		gameWinBillboard = new Billboard2D((WCHAR*)L"KA/GUI/Menus/GameWin.png", 2, 2, (SCR_WIDTH - 200) / 2, (SCR_HEIGHT - 200) / 2, 0, this->cameraDetails); // Centered on screen
+		glm::vec3 scale = glm::vec3(1920.0f, 1080.0f, 0.0f);
+		gameWinBillboard->setScale(&scale);
 	}
 
 	void showGameOver() {
 		gameOverVisible = true;
 	}
 
-	void showGameStart() {
-		gameStartVisible = false;
+	void showGameWin() {
+		gameWinVisible = true;
 	}
 
 	~Axolotl() {
@@ -284,23 +284,27 @@ public:
 		delete oxygenBarBot;
 		delete puntosBarTop;
 		delete puntosBarBot;
-		delete gameStartBillboard;
 		delete gameOverBillboard;
+		delete gameWinBillboard;
 		delete saludTexto;
 		delete oxigenoTexto;
 		delete puntosTexto;
 	}
 
 	void Draw() {
-		if (gameStartVisible) {
-			gameStartBillboard->Draw();
-		}
-
 		if (gameOverVisible) {
 			gameOverBillboard->Draw();
 
 			if (MessageBox(NULL, L"No te rindas! tus esfuerzos no han sido en vano. ¿Deseas volver a intentarlo?",
 				L"GAME OVER", MB_OKCANCEL | MB_ICONINFORMATION) == IDOK) {
+				exit(0);
+			}
+		}
+		if (gameWinVisible) {
+			gameWinBillboard->Draw();
+
+			if (MessageBox(NULL, L"Felicidades! Has ganado el Axolotour",
+				L"CONGRATS!", MB_OKCANCEL | MB_ICONINFORMATION) == IDOK) {
 				exit(0);
 			}
 		}
