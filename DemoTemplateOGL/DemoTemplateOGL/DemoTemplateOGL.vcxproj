@@ -161,6 +161,7 @@
     <ClInclude Include="Billboard2DAnimation.h" />
     <ClInclude Include="CollitionBox.h" />
     <ClInclude Include="KA\Axolotl.h" />
+    <ClInclude Include="KA\MainMenu.h" />
     <ClInclude Include="KDTree\CollitionDetection.h" />
     <ClInclude Include="Lluvia.h" />
     <ClInclude Include="Menu.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="Base\Bone.cpp" />
     <ClCompile Include="Base\font_atlas.cpp" />
     <ClCompile Include="CollitionBox.cpp" />
+    <ClCompile Include="KA\MainMenu.cpp" />
     <ClCompile Include="KDTree\CollitionDetection.cpp" />
     <ClCompile Include="DemoTemplateOGL.cpp" />
     <ClCompile Include="Base\glad.c" />

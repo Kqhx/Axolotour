@@ -144,6 +144,9 @@
     <ClInclude Include="KA\Axolotl.h">
       <Filter>Header Files\KA</Filter>
     </ClInclude>
+    <ClInclude Include="KA\MainMenu.h">
+      <Filter>Header Files\KA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoTemplateOGL.cpp">
@@ -193,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KA\MainMenu.cpp">
+      <Filter>Source Files\KA</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,7 @@
 #include "Menu.h"
 
 #include "KA/Axolotl.h"
+#include "KA/MainMenu.h"
 
 #define MAX_LOADSTRING 100
 #ifdef _WIN32 
@@ -73,12 +74,16 @@ struct GameTime gameTime;
 Camera* Camera::cameraInstance = NULL;
 int menuOption = 1;
 bool menuActive = false;
+int mainmenuOption = 1;
+bool mainmenuActive = true;
 GameActions prevActions;
+GameActions prevActionsMain;
 bool gameRunning = true;
 
 // Objecto de escena y render
 Scene *OGLobj = NULL;
 Menu *menu = NULL;
+MainMenu* mainmenu = NULL;
 
 #ifdef _WIN32 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -177,6 +182,7 @@ int startGameEngine(void *ptrMsg){
         double jump = 0;
         Lluvia lluvia(50.0f, 50.0f, 50.0f, camera);
         prevActions.jump = &jump;
+        mainmenu = new MainMenu(model);
         menu = new Menu(model);
     //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         while (isProgramRunning(ptrMsg)) {
@@ -193,6 +199,20 @@ int startGameEngine(void *ptrMsg){
             actions.jump = &jump;
             // render
             // ------
+            if (mainmenuActive) {
+
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                GameActions actions;
+                actions.jump = &jump;
+                checkInput(&actions, OGLobj);
+
+                mainmenu->update(mainmenuOption);
+                mainmenu->Render();
+
+                swapGLBuffers();
+                continue;
+            }
             bool checkCollition = checkInput(&actions, OGLobj);
             int cambio = OGLobj->update();
             Scene *escena = OGLobj->Render();
@@ -234,6 +254,19 @@ bool checkInput(GameActions *actions, Scene* scene) {
         mouseActions();
         KeysEvents(actions);
     }
+    if (mainmenuActive) {
+        if (prevActionsMain.advance != actions->advance) {
+            mainmenuOption -= actions->advance;
+            prevActionsMain.advance = actions->advance;
+        }
+        if (actions->action && mainmenuOption == 1) {
+            mainmenuActive = false;
+        }
+        if (actions->action && mainmenuOption == 2) {
+            gameRunning = false;
+        }
+        return true;
+    }
     if (actions->menu){
         menuActive = !menuActive;
         menuOption = 1;
@@ -244,10 +277,10 @@ bool checkInput(GameActions *actions, Scene* scene) {
             prevActions.advance = actions->advance;
         }
         if (actions->action && menuOption == 1) {
-            gameRunning = true;
+            menuActive = false;
         }
-        if (actions->action && menuOption == 4){
-            gameRunning = false;
+        if (actions->action && menuOption == 2){
+            mainmenuActive = true;
         }
         return true;
     }

@@ -68,6 +68,7 @@ struct GameActions {
 	bool action = false;
 	bool displayHitboxStats = false;
 	bool menu = false;
+	bool mainmenu = false;
 	void setZoom(float value);
 	float* getZoom();
 	void setPlayerZoom(float value);
