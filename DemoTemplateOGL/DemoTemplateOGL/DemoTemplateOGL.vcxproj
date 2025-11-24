@@ -160,6 +160,7 @@
     <ClInclude Include="Billboard2D.h" />
     <ClInclude Include="Billboard2DAnimation.h" />
     <ClInclude Include="CollitionBox.h" />
+    <ClInclude Include="KA\Axolotl.h" />
     <ClInclude Include="KDTree\CollitionDetection.h" />
     <ClInclude Include="Lluvia.h" />
     <ClInclude Include="Menu.h" />

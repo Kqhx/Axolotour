@@ -9,12 +9,14 @@
 #include "Water.h"
 #include "Animator.h"
 #include "Animation.h"
+#include "KA/Axolotl.h"
 
 class Scene {
 	public:
 		virtual float getAngulo() = 0;
 		virtual void setAngulo(float angulo) = 0;
 		virtual Model* getMainModel() = 0;
+		virtual Axolotl* getMainAxolotl() = 0;
 		virtual void setMainModel(Model* mainModel) = 0;
 		virtual Scene* Render() = 0;
 		virtual SkyDome* getSky() = 0;

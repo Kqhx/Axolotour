@@ -18,6 +18,8 @@
 #include "Lluvia.h"
 #include "Menu.h"
 
+#include "KA/Axolotl.h"
+
 #define MAX_LOADSTRING 100
 #ifdef _WIN32 
 #include "InputDevices/GamePadRR.h"
@@ -141,7 +143,7 @@ int startGameEngine(void *ptrMsg){
     //5, ye - 1,-5
     //MainModel *model = new MainModel(hWnd, "models/Cube.obj", translate);
     Camera* camera = Camera::getInstance();
-    Model* model = new Model("KA/Models/Axo/Axolotlalli.fbx", translate, camera);
+    Axolotl* model = new Axolotl("KA/Models/Axo/Axolotlalli.fbx", translate, camera);
     model->setTranslate(&translate);
     camera->setFront(v);
     camera->setCharacterHeight(1.25);
@@ -209,7 +211,11 @@ int startGameEngine(void *ptrMsg){
         }
     }catch(...){
     }
-    model = OGLobj != NULL ? OGLobj->getMainModel() : model;
+    if (OGLobj != NULL) {
+        Axolotl* recovered = OGLobj->getMainAxolotl();
+        if (recovered)
+            model = recovered;
+    }
     if (menu != NULL) delete menu;
     if (OGLobj != NULL) delete OGLobj;
     if (camera != NULL) delete camera;

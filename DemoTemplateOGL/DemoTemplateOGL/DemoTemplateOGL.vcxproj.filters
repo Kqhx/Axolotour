@@ -34,6 +34,12 @@
     <Filter Include="Source Files\InputDevices">
       <UniqueIdentifier>{0eea53f6-0af1-4560-8dd9-2a63c5bc4608}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\KA">
+      <UniqueIdentifier>{0cefb2d6-4785-401a-b0fd-cad13bc3bfbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\KA">
+      <UniqueIdentifier>{9557a450-00f4-47b6-a26b-18446041eb53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scenario.h">
@@ -131,6 +137,12 @@
     </ClInclude>
     <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lluvia.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KA\Axolotl.h">
+      <Filter>Header Files\KA</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

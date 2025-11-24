@@ -306,6 +306,9 @@ std::vector<BillboardAnimation*> *Scenario::getLoadedBillboardsAnimation(){
 Model* Scenario::getMainModel() {
 	return this->camara;
 }
+Axolotl* Scenario::getMainAxolotl() {
+	return dynamic_cast<Axolotl*>(this->camara);
+}
 void Scenario::setMainModel(Model* mainModel){
 	this->camara = mainModel;
 }

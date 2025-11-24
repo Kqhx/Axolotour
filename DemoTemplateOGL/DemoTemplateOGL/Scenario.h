@@ -18,6 +18,8 @@
 #include "Billboard2D.h"
 #include "CollitionBox.h"
 
+#include "KA/Axolotl.h"
+
 class Scenario : public Scene {
 private:
 	SkyDome* sky;
@@ -48,6 +50,7 @@ public:
 	std::vector<Billboard2D*> *getLoadedBillboards2D();
 	std::vector<Texto*> *getLoadedText();
 	Model* getMainModel();
+	Axolotl* getMainAxolotl();
 	void setMainModel(Model* mainModel);
 	float getAngulo();
 	void setAngulo(float angulo);
