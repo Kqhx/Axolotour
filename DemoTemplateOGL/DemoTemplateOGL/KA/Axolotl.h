@@ -160,7 +160,9 @@ public:
 				INFO("Perdiste tu última vida", "CONTINUE");
 			}
 			salud = 100; // Reset health after losing a life
+			oxigeno = 50; // Reset oxygen after losing a life
 			updateHP();
+			updateOX();
 		}
 		if (vidas <= 0) {
 			showGameOver(); // Show Game Over when lives reach 0
@@ -221,6 +223,34 @@ public:
 		std::wstring updatedText = std::to_wstring(static_cast<int>(oxigeno)) + L"/100";
 		if (oxigenoTexto) {
 			oxigenoTexto->initTexto(updatedText); // Update the text
+		}
+	}
+
+	void updateOxygenByPosition(float deltaTime)
+	{
+		glm::vec3 pos = *getTranslate();
+
+		// Si está debajo de y10 -> bajo el agua
+		if (pos.y < 10.0f)
+		{
+			oxigeno -= 1.5f * deltaTime;   // Ajusta velocidad según prefieras
+
+			if (oxigeno <= 0.0f)
+			{
+				oxigeno = 0.0f;
+				reduceHealth(0.1f);  // dañarlo si no tiene oxígeno
+			}
+
+			updateOX();
+		}
+		else
+		{
+			// Opcional: si sale del agua, recupera oxígeno lentamente
+			oxigeno += 0.5f * deltaTime;
+			if (oxigeno > 100.0f)
+				oxigeno = 100.0f;
+
+			updateOX();
 		}
 	}
 

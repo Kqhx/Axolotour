@@ -248,6 +248,10 @@ Scene* Scenario::Render() {
 	} else {
 		animacion = animacion + (1 * gameTime.deltaTime/100);
 	}
+	Axolotl* axo = getMainAxolotl();
+	if (axo) {
+		axo->updateOxygenByPosition(gameTime.deltaTime/100);
+	}
 	// Decimos que dibuje la media esfera
 	sky->Draw();
 	// Ahora el terreno

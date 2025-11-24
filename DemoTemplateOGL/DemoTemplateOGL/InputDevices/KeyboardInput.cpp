@@ -51,6 +51,35 @@ void Init() {
 
 bool KeysEvents(GameActions *actions){
 	bool checkCollition = false;
+
+	if (KEYS[input.W]) {
+		actions->advance = 1; // 1 avanza
+	}
+	if (KEYS[input.A]) {
+		if (KEYS[KEYB_HMOVEMENT])
+			actions->hAdvance = 1;
+		else
+			actions->sideAdvance = 1;
+	}
+	if (KEYS[input.S]) {
+		actions->advance = -1; // -1 retrocede
+	}
+	if (KEYS[input.D]) {
+		if (KEYS[KEYB_HMOVEMENT])
+			actions->hAdvance = -1;
+		else
+			actions->sideAdvance = -1;
+	}
+
+	// SPRINT
+	if (KEYS[KEYB_SPRINT]) {
+		actions->sprintPressed = true;
+	}
+	// CTRL
+	if (KEYS[KEYB_CTRL]) {
+		actions->ctrlPressed = true;
+	}
+
 	if (KEYS[input.Escape]){
 		actions->menu = true;
 		KEYS[input.Escape] = false;
@@ -71,28 +100,13 @@ bool KeysEvents(GameActions *actions){
 		actions->displayHitboxStats = !actions->displayHitboxStats;
 		KEYS[input.C] = false;
 	}
-	if (KEYS[input.D]) {
-		if (KEYS[KEYB_HMOVEMENT])
-			actions->hAdvance = -1;
-		else
-			actions->sideAdvance = -1;
-//		KEYS[input.D] = false;
+	if (KEYS[input.Left]) {
+		actions->sideAdvance = 1; //TURN TO THE LEFT
 	}
-	if (KEYS[input.A]) {
-		if (KEYS[KEYB_HMOVEMENT])
-			actions->hAdvance = 1;
-		else
-			actions->sideAdvance = 1;
-//		KEYS[input.A] = false;
+	if (KEYS[input.Right]) {
+		actions->sideAdvance = -1; //TURN TO THE RIGHT
 	}
-	if (KEYS[input.W]) {
-		actions->advance = 1;
-//		KEYS[input.W] = false;
-	}
-	if (KEYS[input.S]) {
-		actions->advance = -1;
-//		KEYS[input.S] = false;
-	}
+
 	if (KEYS[input.Space] && *actions->jump == 0){
 		*actions->jump = 20;
 	}

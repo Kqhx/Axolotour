@@ -188,6 +188,7 @@ int startGameEngine(void *ptrMsg){
                 totFrames = 1;
             }
             updatePosCords(coordenadas);
+
             GameActions actions;
             actions.jump = &jump;
             // render
@@ -242,6 +243,9 @@ bool checkInput(GameActions *actions, Scene* scene) {
             menuOption -= actions->advance;
             prevActions.advance = actions->advance;
         }
+        if (actions->action && menuOption == 1) {
+            gameRunning = true;
+        }
         if (actions->action && menuOption == 4){
             gameRunning = false;
         }
@@ -260,23 +264,43 @@ bool checkInput(GameActions *actions, Scene* scene) {
         OGLobj->cameraDetails->setFirstPerson(!OGLobj->cameraDetails->getFirstPerson());
     }
     if (actions->sideAdvance != 0) {
+        float speed = 1.0f * gameTime.deltaTime / 100.0f;
+        if (actions->sprintPressed == true) {
+            speed = 2.5f * gameTime.deltaTime / 100.0f;
+        }
+        if (actions->ctrlPressed == true) {
+            speed = 0.25f * gameTime.deltaTime / 100.0f;
+        }
         glm::vec3 pos = *OGLobj->getNextTranslate();
         glm::vec3 right = OGLobj->cameraDetails->getFront();
         float rotY = glm::radians(OGLobj->getNextRotY());
-        float speed = 3.0f * gameTime.deltaTime / 100.0f;
         pos += right * (speed * -actions->sideAdvance);
         OGLobj->setNextTranslate(&pos);
     }
     if (actions->hAdvance != 0) {
+        float speed = 1.0f * gameTime.deltaTime / 100.0f;
+        if (actions->sprintPressed == true) {
+            speed = 2.5f * gameTime.deltaTime / 100.0f;
+        }
+        if (actions->ctrlPressed == true) {
+            speed = 0.25f * gameTime.deltaTime / 100.0f;
+        }
         glm::vec3 pos = *OGLobj->getNextTranslate();
-        pos.x += actions->hAdvance * (3 * gameTime.deltaTime / 100) * glm::cos(glm::radians(OGLobj->getRotY()));
-        pos.z += actions->hAdvance * (3 * gameTime.deltaTime / 100) * glm::sin(glm::radians(OGLobj->getRotY()));
+        pos.x += actions->hAdvance * (speed) * glm::cos(glm::radians(OGLobj->getRotY()));
+        pos.z += actions->hAdvance * (speed) * glm::sin(glm::radians(OGLobj->getRotY()));
         OGLobj->setNextTranslate(&pos);
     }
     if (actions->advance != 0) {
+        float speed = 1.0f * gameTime.deltaTime / 100.0f;
+        if (actions->sprintPressed == true) {
+            speed = 2.5f * gameTime.deltaTime / 100.0f;
+        }
+        if (actions->ctrlPressed == true) {
+            speed = 0.25f * gameTime.deltaTime / 100.0f;
+        }
         glm::vec3 pos = *OGLobj->getNextTranslate();
-        pos.x += actions->advance * (3 * gameTime.deltaTime / 100) * glm::sin(glm::radians(OGLobj->getRotY()));
-        pos.z += actions->advance * (3 * gameTime.deltaTime / 100) * glm::cos(glm::radians(OGLobj->getRotY()));
+        pos.x += actions->advance * (speed) * glm::sin(glm::radians(OGLobj->getRotY()));
+        pos.z += actions->advance * (speed) * glm::cos(glm::radians(OGLobj->getRotY()));
         // Posicionamos la camara/modelo pixeles arriba de su posicion en el terreno
 //        pos.y = *actions->jump > 0 ? pos.y : scene->getTerreno()->Superficie(pos.x, pos.z);
         OGLobj->setNextTranslate(&pos);

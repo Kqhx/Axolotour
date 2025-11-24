@@ -61,6 +61,7 @@ struct GameActions {
 	int hAdvance = 0;
 	int sideAdvance = 0;
 	bool sprintPressed = false;
+	bool ctrlPressed = false;
 	bool firstPerson = false;
 	bool lockMouse = false;
 	double *jump = NULL;
