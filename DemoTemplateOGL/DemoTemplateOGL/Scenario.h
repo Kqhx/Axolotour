@@ -19,6 +19,7 @@
 #include "CollitionBox.h"
 
 #include "KA/Axolotl.h"
+#include "KA/Coin.h"
 
 class Scenario : public Scene {
 private:

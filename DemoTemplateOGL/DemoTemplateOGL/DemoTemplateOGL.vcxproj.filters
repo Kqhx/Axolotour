@@ -147,6 +147,9 @@
     <ClInclude Include="KA\MainMenu.h">
       <Filter>Header Files\KA</Filter>
     </ClInclude>
+    <ClInclude Include="KA\Coin.h">
+      <Filter>Header Files\KA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoTemplateOGL.cpp">

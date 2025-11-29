@@ -161,6 +161,7 @@
     <ClInclude Include="Billboard2DAnimation.h" />
     <ClInclude Include="CollitionBox.h" />
     <ClInclude Include="KA\Axolotl.h" />
+    <ClInclude Include="KA\Coin.h" />
     <ClInclude Include="KA\MainMenu.h" />
     <ClInclude Include="KDTree\CollitionDetection.h" />
     <ClInclude Include="Lluvia.h" />

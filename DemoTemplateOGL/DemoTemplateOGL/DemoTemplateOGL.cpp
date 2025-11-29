@@ -17,8 +17,6 @@
 #include "Scenario.h"
 #include "Lluvia.h"
 #include "Menu.h"
-
-#include "KA/Axolotl.h"
 #include "KA/MainMenu.h"
 
 #define MAX_LOADSTRING 100

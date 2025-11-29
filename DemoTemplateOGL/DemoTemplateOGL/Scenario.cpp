@@ -26,6 +26,7 @@ void Scenario::InitGraph(Model *main) {
 	camara = main;
 	Model* model;
 	ModelAttributes m;
+	Axolotl* axo = getMainAxolotl();
 	
 
 	// -------------------------------
@@ -122,6 +123,8 @@ void Scenario::InitGraph(Model *main) {
 	liberty->setNextTranslate(&translate);
 	scale = glm::vec3(6.0f, 6.0f, 6.0f);
 	liberty->setScale(&scale);
+	liberty->setRotX(0);
+	liberty->setNextRotX(0);
 	//for (auto& attr : *liberty->getModelAttributes()) {
 	//	attr.hitbox = NULL;
 	//}
@@ -135,6 +138,7 @@ void Scenario::InitGraph(Model *main) {
 	tower->setNextTranslate(&translate);
 	scale = glm::vec3(4.0f, 4.0f, 4.0f);
 	tower->setScale(&scale);
+	tower->setRotX(-90);
 	tower->setNextRotX(-90);
 	//for (auto& attr : *tower->getModelAttributes()) {
 	//	attr.hitbox = NULL;
@@ -180,10 +184,7 @@ void Scenario::InitGraph(Model *main) {
 	y_tree = terreno->Superficie(0, 5);
 	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree5.png", 12, 12, 0, y_tree+5, 5, camara->cameraDetails);
 	billBoard.emplace_back(arbol);
-	// Map
-	billBoard2D.emplace_back(new Billboard2D((WCHAR*)L"KA/Billboards/Map.png", 12, 12, 1920-250, 250, 0, camara->cameraDetails));
-	scale = glm::vec3(450.0f, 450.0f, 0.0f);	// it's a bit too big for our scene, so scale it down
-	billBoard2D.back()->setScale(&scale);
+	
 
 
 	// -------------------------------
@@ -208,116 +209,190 @@ void Scenario::InitGraph(Model *main) {
 
 
 	// -------------------------------
-	// -----    LOAD HITBOXES    -----
+	// -----     LOAD OTHERS     -----
 	// -------------------------------
 	
-
-	
-	//PLANTILLA:
-	//inicializaBillboards();
-	/*Model *pez = new Model("models/pez/pez.obj", main->cameraDetails);
-	translate = glm::vec3(0.0f, terreno->Superficie(0.0f, 50.0f), 50.0f);
-	pez->setNextTranslate(&translate);
-	pez->setTranslate(&translate);
-	ourModel.emplace_back(pez);
-	model = CollitionBox::GenerateAABB(m.translate, pez->AABBsize, main->cameraDetails);
-	m.hitbox = model;
-	pez->getModelAttributes()->push_back(m);
-	translate.x = 5;
-	pez->setTranslate(&translate, pez->getModelAttributes()->size()-1);
-	pez->setNextTranslate(&translate, pez->getModelAttributes()->size()-1);
-	model = CollitionBox::GenerateAABB(m.translate, pez->AABBsize, main->cameraDetails);
-	m.hitbox = model; // Le decimos al ultimo ModelAttribute que tiene un hitbox asignado
-	pez->getModelAttributes()->push_back(m);
-	translate.x = 10;
-	pez->setTranslate(&translate, pez->getModelAttributes()->size()-1);
-	pez->setNextTranslate(&translate, pez->getModelAttributes()->size()-1);
-
-	model = new Model("models/dancing_vampire/dancing_vampire.dae", main->cameraDetails);
-	translate = glm::vec3(0.0f, terreno->Superficie(0.0f, 60.0f), 60.0f);
-	scale = glm::vec3(0.02f, 0.02f, 0.02f);	// it's a bit too big for our scene, so scale it down
-	model->setTranslate(&translate);
-	model->setNextTranslate(&translate);
-	model->setScale(&scale);
-	model->setNextRotY(90);
-	ourModel.emplace_back(model);
-	try{
-		std::vector<Animation> animations = Animation::loadAllAnimations("models/dancing_vampire/dancing_vampire.dae", model->GetBoneInfoMap(), model->getBonesInfo(), model->GetBoneCount());
-		std::vector<Animation> animation = Animation::loadAllAnimations("models/dancing_vampire/dancing_vampire.dae", model->GetBoneInfoMap(), model->getBonesInfo(), model->GetBoneCount());
+	glm::vec3 posCoin = glm::vec3(155, terreno->Superficie(155, -110) + 2, -110);
+	Coin* coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations( "KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
 		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
 		for (Animation animation : animations)
-			model->setAnimator(Animator(animation));
-		model->setAnimation(1);
-	}catch(...){
-		ERRORL("Could not load animation!", "ANIMACION");
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
 	}
 
-	Model* silly = new Model("models/Silly_Dancing/Silly_Dancing.fbx", main->cameraDetails);
-	translate = glm::vec3(10.0f, terreno->Superficie(10.0f, 60.0f) , 60.0f);
-	scale = glm::vec3(0.02f, 0.02f, 0.02f);	// it's a bit too big for our scene, so scale it down
-	silly->setTranslate(&translate);
-	silly->setNextTranslate(&translate);
-	silly->setScale(&scale);
-	silly->setNextRotY(180);
-	ourModel.emplace_back(silly);
-	try{
-		std::vector<Animation> animations = Animation::loadAllAnimations("models/Silly_Dancing/Silly_Dancing.fbx", silly->GetBoneInfoMap(), silly->getBonesInfo(), silly->GetBoneCount());
+	posCoin = glm::vec3(270, terreno->Superficie(270, -190) + 2, -190);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
 		for (Animation animation : animations)
-			silly->setAnimator(Animator(animation));
-		silly->setAnimation(0);
-	}catch(...){
-		ERRORL("Could not load animation!", "ANIMACION");
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
 	}
 
-	model = CollitionBox::GenerateAABB(translate, silly->AABBsize, main->cameraDetails);
-	m.hitbox = model; // Le decimos al ultimo ModelAttribute que tiene un hitbox asignado
-	silly->getModelAttributes()->push_back(m);
-	translate.x += 10;
-	silly->setTranslate(&translate, silly->getModelAttributes()->size()-1);
-	silly->setNextTranslate(&translate, silly->getModelAttributes()->size()-1);
-	silly->setScale(&scale, silly->getModelAttributes()->size()-1);
-	silly->setNextRotY(180, silly->getModelAttributes()->size()-1);
-	silly->setRotY(180, silly->getModelAttributes()->size()-1);
-	// Import model and clone with bones and animations
+	posCoin = glm::vec3(165, terreno->Superficie(165, -240) + 2, -240);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
 
-	model = new Model("models/Silly_Dancing/Silly_Dancing.fbx", main->cameraDetails);
-	translate = glm::vec3(30.0f, terreno->Superficie(30.0f, 60.0f) , 60.0f);
-	scale = glm::vec3(0.02f, 0.02f, 0.02f);	// it's a bit too big for our scene, so scale it down
-	model->name = "Silly_Dancing1";
-	model->setTranslate(&translate);
-	model->setNextTranslate(&translate);
-	model->setScale(&scale);
-	model->setNextRotY(180);
-	ourModel.emplace_back(model);
-	// Para clonar la animacion se eliminan los huesos del modelo actual y se copian los modelos y animators
-	model->GetBoneInfoMap()->clear();
-	model->getBonesInfo()->clear();
-	*model->GetBoneInfoMap() = *silly->GetBoneInfoMap();
-	*model->getBonesInfo() = *silly->getBonesInfo();
-	model->setAnimator(silly->getAnimator());
+	posCoin = glm::vec3(10, terreno->Superficie(10, -5) + 2, -5);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	coin->setNextRotY(180);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
+
+	posCoin = glm::vec3(-230, terreno->Superficie(-230, -230) + 2, -230);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	coin->setNextRotY(90);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
+
+	posCoin = glm::vec3(165, terreno->Superficie(165, 190) + 2, 190);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
+
+	//posCoin = glm::vec3(x, terreno->Superficie(x, y) + 2, y);
+	//coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	//coin->setTranslate(&posCoin);
+	//coin->setNextTranslate(&posCoin);
+	//scale = glm::vec3(5, 5, 5);
+	//coin->setScale(&scale);
+	//for (auto& attr : *coin->getModelAttributes()) {
+	//	attr.hitbox = NULL;
+	//}
+	//ourModel.emplace_back(coin);
+	//try {
+	//	std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+	//	std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+	//	std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+	//	for (Animation animation : animations)
+	//		coin->setAnimator(Animator(animation));
+	//	coin->setAnimation(1);
+	//}
+	//catch (...) {
+	//	ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	//}
+
+
+	// Map
+	Billboard2D* miniMap = new Billboard2D(
+		(WCHAR*)L"KA/Billboards/Map.png",
+		12, 12,
+		1920 - 250, 250, 0,
+		camara->cameraDetails
+	);
+	scale = glm::vec3(450, 450, 0);
+	miniMap->setScale(&scale);
+	billBoard2D.emplace_back(miniMap);
+
+	// Pointer
+	Billboard2D* locator = new Billboard2D(
+		(WCHAR*)L"KA/Billboards/Locator.png",
+		2, 2,
+		1920 - 250, 250, 0,
+		camara->cameraDetails
+	);
+	scale = glm::vec3(20, 20, 0);
+	locator->setScale(&scale);
+	billBoard2D.emplace_back(locator);
 
 	
-	model = new Model("models/backpack/backpack.obj", main->cameraDetails, false, false);
-	translate = glm::vec3(20.0f, terreno->Superficie(20.0f, 0.0f) + 2, 0.0f);
-	scale = glm::vec3(1.0f, 1.0f, 1.0f);	// it's a bit too big for our scene, so scale it down
-	model->setTranslate(&translate);
-	model->setNextTranslate(&translate);
-	model->setScale(&scale);
-	ourModel.emplace_back(model);
-
-	model->lightColor = glm::vec3(10,0,0);
-	model = new CollitionBox(60.0f, 15.0f, 10.0f, 10, 10, 10, main->cameraDetails);
-	scale = glm::vec3(1.0f, 1.0f, 1.0f);	// it's a bit too big for our scene, so scale it down
-	model->setNextTranslate(model->getTranslate());
-	model->setScale(&scale);
-	ourModel.emplace_back(model);
-
-	std::wstring prueba(L"Esta es una prueba");
-	ourText.emplace_back(new Texto(prueba, 20, 0, 0, SCR_HEIGHT, 0, camara));
-	billBoard2D.emplace_back(new Billboard2D((WCHAR*)L"billboards/awesomeface.png", 6, 6, 100, 200, 0, camara->cameraDetails));
-	scale = glm::vec3(100.0f, 100.0f, 0.0f);	// it's a bit too big for our scene, so scale it down
-	billBoard2D.back()->setScale(&scale);*/
-	}
+}
 
 	void Scenario::placeModelAngel(Model* main)
 	{
@@ -397,38 +472,7 @@ void Scenario::InitGraph(Model *main) {
 		ourModel.emplace_back(hitBox);
 	}
 
-/*void Scenario::inicializaBillboards() {
-	float ye = terreno->Superficie(0, 0) + 3;
-	Billboard *arbol = new Billboard((WCHAR*)L"billboards/Arbol.png", 6, 6, 0, ye, 0, camara->cameraDetails);
-	billBoard.emplace_back(arbol);
-	ModelAttributes mAttr;
-	glm::vec3 pos(5, ye, 0);
-	mAttr.setTranslate(&pos);
-	arbol->getModelAttributes()->push_back(mAttr);
-	pos = glm::vec3(10, ye, 0);
-	mAttr.setTranslate(&pos);
-	arbol->getModelAttributes()->push_back(mAttr);
-	pos = glm::vec3(-10, ye, 0);
-	mAttr.setTranslate(&pos);
-	arbol->getModelAttributes()->push_back(mAttr);
 
-	ye = terreno->Superficie(-9, -15) + 4;
-	billBoard.emplace_back(new Billboard((WCHAR*)L"billboards/Arbol3.png", 8, 8, -9, ye, -15, camara->cameraDetails));
-
-	BillboardAnimation *billBoardAnimated = new BillboardAnimation();
-	ye = terreno->Superficie(5, -5) + 3;
-	for (int frameArbol = 1; frameArbol < 4; frameArbol++){
-		wchar_t textura[50] = {L"billboards/Arbol"};
-		if (frameArbol != 1){
-			wchar_t convert[25];
-			swprintf(convert, 25, L"%d", frameArbol);
-			wcscat_s(textura, 50, convert);
-		}
-		wcscat_s(textura, 50, L".png");
-		billBoardAnimated->pushFrame(new Billboard((WCHAR*)textura, 6, 6, 5, ye, -5, camara->cameraDetails));		
-	}
-	billBoardAnim.emplace_back(billBoardAnimated);
-}*/
 
 	//el metodo render toma el dispositivo sobre el cual va a dibujar
 	//y hace su tarea ya conocida
@@ -458,6 +502,22 @@ Scene* Scenario::Render() {
 	Axolotl* axo = getMainAxolotl();
 	if (axo) {
 		axo->updateOxygenByPosition(gameTime.deltaTime/100);
+	}
+	for (auto& m : ourModel) {
+		Coin* c = dynamic_cast<Coin*>(m);
+		if (c && !c->isTaken()) {
+
+			glm::vec3 a = *axo->getTranslate();
+			glm::vec3 b = *c->getTranslate();
+
+			float d = glm::distance(a, b);
+
+			if (d < 4.0f) { // radio de recogida
+				c->take();
+				c->setScale(new glm::vec3(0, 0, 0));  // desaparecer
+				axo->setPoints(axo->getPoints() + c->getValue());
+			}
+		}
 	}
 	// Decimos que dibuje la media esfera
 	sky->Draw();

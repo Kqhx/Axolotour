@@ -22,6 +22,8 @@ private:
 	Billboard2D* puntosBarTop;
 	Billboard2D* gameOverBillboard;
 	Billboard2D* gameWinBillboard;
+	Billboard2D* locator;
+	Billboard2D* minimap;
 	bool gameOverVisible = false;
 	bool gameWinVisible = false;
 
@@ -91,7 +93,7 @@ public:
 		puntos = newPuntos;
 		updatePT();
 	}
-
+	
 	//Mostrar billboards
 	//CORAZONES
 	void showHearts() {
@@ -191,6 +193,9 @@ public:
 		glm::vec3 scale = glm::vec3(320.0f * ptPercent, 32.0f, 0.0f);
 		puntosBarTop->setScale(&scale);
 		updatePTDisplay();
+		if ((puntos/6.0f) == 1) {
+			showGameWin();
+		}
 	}
 
 	void initTextDisplay() {
