@@ -348,12 +348,12 @@ glm::vec3* Model::getVelocity(){
     return &velocity;
 }
 
-ModelCollider Model::update(float terrainY, std::vector<Model*>& models, glm::vec3 &ejeColision, bool gravityEnable, int idx){
+ModelCollider Model::update(float terrainY, std::vector<Model*>& models, glm::vec3& ejeColision, bool gravityEnable, int idx) {
     ModelCollider collide = { 0 };
     if (this->ignoreAABB)
         return collide;
     // Apply gravity
-    this->velocity.y += GRAVITY * gameTime.deltaTime/1000;
+    this->velocity.y += GRAVITY * gameTime.deltaTime / 1000;
     if (this->velocity.y < TERMINAL_VELOCITY) {
         this->velocity.y = TERMINAL_VELOCITY;
     }
@@ -379,58 +379,64 @@ ModelCollider Model::update(float terrainY, std::vector<Model*>& models, glm::ve
     }
     setNextTranslate(&nextGPosition, idx);
 
-    glm::vec3 yPos;
+    glm::vec4 yPos;
     // Check collisions with objects
-    yPos = glm::vec3(0);
+    yPos = glm::vec4(0);
     for (int i = 0; i < models.size(); i++) {
-        Model *other = models[i];
+        Model* other = models[i];
         for (int j = 0; j < other->getModelAttributes()->size(); j++) {
             if (this != other && this->colisionaCon(other->getModelAttributes()->at(j), yPos, thisInMovement, idx)) {
-    //            bool objInMovement = (*other->getNextTranslate()) != (*other->getTranslate());
-                // If colliding, place object on top of the other object
-    //            glm::vec3 &otherPos = objInMovement ? *other->getNextTranslate() : *other->getTranslate();
-    //            nextPosition.y = otherPos.y + other->AABBsize.m_halfHeight + this->AABBsize.m_halfHeight / 2;
+                //            bool objInMovement = (*other->getNextTranslate()) != (*other->getTranslate());
+                            // If colliding, place object on top of the other object
+                //            glm::vec3 &otherPos = objInMovement ? *other->getNextTranslate() : *other->getTranslate();
+                //            nextPosition.y = otherPos.y + other->AABBsize.m_halfHeight + this->AABBsize.m_halfHeight / 2;
                 this->velocity.y = 0.0f;  // Stop downward movement
                 ejeColision.x = 1;
                 ejeColision.z = 1;
-                collide.model = other;
-                collide.attrIdx = j;
-                if (!other->walkeable){
+                if (!other->walkeable) {
+                    collide.model = other;
+                    collide.attrIdx = j;
                     setNextTranslate(getTranslate(idx), idx);
                     setNextRotX(getRotX(idx), idx);
                     setNextRotY(getRotY(idx), idx);
                     setNextRotZ(getRotZ(idx), idx);
                     break;
                 }
-                if (nextGPosition.y > (yPos.y * 0.90)){
-                    nextGPosition.y = yPos.y;
-                    setNextTranslate(&nextGPosition, idx);
-                    ejeColision.y = 1;
-                    break;
+                if (collide.model != NULL) {
+                    collide.model = other;
+                    collide.attrIdx = j;
                 }
-                setNextTranslate(&nextPosition, idx);
-                if (!this->colisionaCon(other->getModelAttributes()->at(j), yPos, thisInMovement, idx)) {
-                    break;
-                }
-                if (nextPosition.y > (yPos.y * 0.90)) {
-                    nextPosition.y = yPos.y;
+                else {
+                    if (yPos.w == false && nextGPosition.y > (yPos.y * 0.90)) {
+                        nextGPosition.y = yPos.y;
+                        setNextTranslate(&nextGPosition, idx);
+                        ejeColision.y = 1;
+                        break;
+                    }
                     setNextTranslate(&nextPosition, idx);
-                    ejeColision.y = 1;
-                    break;
-                }
-                setNextTranslate(&prevGPosition, idx);
-                if (!this->colisionaCon(other->getModelAttributes()->at(j), yPos, thisInMovement, idx)) {
-                    break;
-                }
-                if (prevGPosition.y > (yPos.y * 0.90)) {
-                    prevGPosition.y = yPos.y;
+                    if (!this->colisionaCon(other->getModelAttributes()->at(j), yPos, thisInMovement, idx)) {
+                        break;
+                    }
+                    if (yPos.w == false && nextPosition.y > (yPos.y * 0.90)) {
+                        nextPosition.y = yPos.y;
+                        setNextTranslate(&nextPosition, idx);
+                        ejeColision.y = 1;
+                        break;
+                    }
                     setNextTranslate(&prevGPosition, idx);
-                    ejeColision.y = 1;
-                    break;
-                }
-                setNextTranslate(&prevPosition, idx);
-                if (!this->colisionaCon(other->getModelAttributes()->at(j), yPos, thisInMovement, idx)){
-                    break;
+                    if (!this->colisionaCon(other->getModelAttributes()->at(j), yPos, thisInMovement, idx)) {
+                        break;
+                    }
+                    if (yPos.w == false && prevGPosition.y > (yPos.y * 0.90)) {
+                        prevGPosition.y = yPos.y;
+                        setNextTranslate(&prevGPosition, idx);
+                        ejeColision.y = 1;
+                        break;
+                    }
+                    setNextTranslate(&prevPosition, idx);
+                    if (!this->colisionaCon(other->getModelAttributes()->at(j), yPos, thisInMovement, idx)) {
+                        break;
+                    }
                 }
                 setNextTranslate(getTranslate(idx), idx);
                 setNextRotX(getRotX(idx), idx);
@@ -745,10 +751,10 @@ void Model::ExtractBoneWeightForVertices(vector<Vertex>& vertices, aiMesh* mesh,
     }
 }
 
-bool Model::colisionaCon(ModelAttributes& objeto, glm::vec3 &yPos, bool collitionMove, int idx) {
+bool Model::colisionaCon(ModelAttributes& objeto, glm::vec4 &yPos, bool collitionMove, int idx) {
     return Model::colisionaCon(this->getModelAttributes()->at(idx), objeto, yPos, collitionMove);
 }
-bool Model::colisionaCon(ModelAttributes& objeto0, ModelAttributes& objeto, glm::vec3 &yPos, bool collitionMove) {
+bool Model::colisionaCon(ModelAttributes& objeto0, ModelAttributes& objeto, glm::vec4 &yPos, bool collitionMove) {
     bool collide = false;
     if (objeto0.hitbox == NULL || objeto.hitbox == NULL)
         return false;
@@ -782,6 +788,7 @@ bool Model::colisionaCon(ModelAttributes& objeto0, ModelAttributes& objeto, glm:
                 if (rayIntersectsOBB(partialPos, stepDir, AABB->meshes.at(0)->vertices, transform2, tMin, tMax)) {
                     if (tMin <= 1.0f && tMax >= 0.0f) {
                         collide = true; // colisión durante el trayecto
+                        yPos.w = true;
                         break;
                     }
                 }

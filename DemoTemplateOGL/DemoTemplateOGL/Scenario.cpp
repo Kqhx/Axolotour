@@ -461,69 +461,96 @@ void Scenario::InitGraph(Model *main) {
 			attr.hitbox = NULL;
 		}
 		ourModel.emplace_back(angel);
-		translate = glm::vec3(260.0f, y_angel + 0.25, -200.0f);
-		int hitboxrot = 0;
 
-		Model* hitBox = new CollitionBox(translate.x, translate.y, translate.z, 6.0f, 60.0f, 6.0f, main->cameraDetails);
-		hitBox->setRotY(45);
-		hitBox->setNextRotY(45);
-		hitBox->walkeable = false;
+		translate = glm::vec3(260.0f, y_angel + 0.25, -200.0f);
+		int mainhitboxrot = 45;
+		int hitboxrot1 = 0;
+		int hitboxrot2 = 0;
+		Model* hitBox = NULL;
+
+		// HITBOX AT CENTER
+		glm::vec3 mainHitboxTrans = translate;
+		mainHitboxTrans = glm::vec3(translate.x, translate.y + 5.5, translate.z);
+		hitBox = new CollitionBox(mainHitboxTrans.x, mainHitboxTrans.y, mainHitboxTrans.z, 10.0f, 3.0f, 10.0f, main->cameraDetails);
+		hitBox->walkeable = true;
+		hitBox->setRotY(mainhitboxrot);
+		hitBox->setNextRotY(mainhitboxrot);
+		hitBox->setTranslate(&mainHitboxTrans);
+		hitBox->setNextTranslate(&mainHitboxTrans);
+		hitBox->ignoreAABB = true;
 		ourModel.emplace_back(hitBox);
 
-		for (int i = 1; i <= 180; i++) {
+		// HITBOX FIRST LAYER
+		glm::vec3 hitboxTrans = translate;
+		for (int i = 1; i <= 16; i++) {
+			hitboxTrans = glm::vec3(translate.x, translate.y - 0.2, translate.z);
+			hitBox = new CollitionBox(hitboxTrans.x, hitboxTrans.y, hitboxTrans.z, 29.0f, 0.5f, 3.5f, main->cameraDetails);
 			hitBox->walkeable = true;
-			hitBox = new CollitionBox(translate.x, translate.y, translate.z, 30.0f, 0.5f, 1.0f, main->cameraDetails);
-			hitBox->setRotY(hitboxrot);
-			hitBox->setNextRotY(hitboxrot);
+			hitBox->setRotY(hitboxrot1);
+			hitBox->setNextRotY(hitboxrot1);
+			hitBox->setTranslate(&hitboxTrans);
+			hitBox->setNextTranslate(&hitboxTrans);
+			hitBox->ignoreAABB = true;
 			ourModel.emplace_back(hitBox);
 
-			hitBox = new CollitionBox(translate.x, translate.y, translate.z, 24.0f, 2.5f, 1.0f, main->cameraDetails);
-			hitBox->setRotY(hitboxrot);
-			hitBox->setNextRotY(hitboxrot);
-			ourModel.emplace_back(hitBox);
-			hitboxrot += 2;
+			hitboxrot1 += 24;
 		}
 
-		hitBox->walkeable = false;
-		hitBox = new CollitionBox(260, translate.y + 5, -175, 1.5f, 10.0f, 1.5f, main->cameraDetails);
-		hitBox->setRotY(45);
-		hitBox->setNextRotY(45);
-		ourModel.emplace_back(hitBox);
+		// HITBOX STAIRS
+		for (int j = 1; j <= 30; j++) {
 
-		hitBox = new CollitionBox(260, translate.y + 10, -187, 2.0f, 6.0f, 2.8f, main->cameraDetails);
-		hitBox->setRotY(0);
-		hitBox->setNextRotY(0);
-		ourModel.emplace_back(hitBox);
+			hitboxTrans = glm::vec3(translate.x, translate.y + 0.5, translate.z);
+			hitBox = new CollitionBox(hitboxTrans.x, hitboxTrans.y, hitboxTrans.z, 26.4f, 0.22f, 3.0f, main->cameraDetails);
+			hitBox->walkeable = true;
+			hitBox->setRotY(hitboxrot2);
+			hitBox->setNextRotY(hitboxrot2);
+			hitBox->setTranslate(&hitboxTrans);
+			hitBox->setNextTranslate(&hitboxTrans);
+			hitBox->ignoreAABB = true;
+			ourModel.emplace_back(hitBox);
 
-		hitBox = new CollitionBox(260, translate.y + 5, -225, 1.5f, 10.0f, 1.5f, main->cameraDetails);
-		hitBox->setRotY(-45);
-		hitBox->setNextRotY(-45);
-		ourModel.emplace_back(hitBox);
+			hitboxTrans = glm::vec3(translate.x, translate.y + 0.94, translate.z);
+			hitBox = new CollitionBox(hitboxTrans.x, hitboxTrans.y, hitboxTrans.z, 25.6f, 0.22f, 2.9f, main->cameraDetails);
+			hitBox->walkeable = true;
+			hitBox->setRotY(hitboxrot2);
+			hitBox->setNextRotY(hitboxrot2);
+			hitBox->setTranslate(&hitboxTrans);
+			hitBox->setNextTranslate(&hitboxTrans);
+			hitBox->ignoreAABB = true;
+			ourModel.emplace_back(hitBox);
 
-		hitBox = new CollitionBox(260, translate.y + 10, -213, 2.0f, 6.0f, 2.8f, main->cameraDetails);
-		hitBox->setRotY(0);
-		hitBox->setNextRotY(0);
-		ourModel.emplace_back(hitBox);
+			hitboxTrans = glm::vec3(translate.x, translate.y + 1.38, translate.z);
+			hitBox = new CollitionBox(hitboxTrans.x, hitboxTrans.y, hitboxTrans.z, 24.8f, 0.22f, 2.8f, main->cameraDetails);
+			hitBox->walkeable = true;
+			hitBox->setRotY(hitboxrot2);
+			hitBox->setNextRotY(hitboxrot2);
+			hitBox->setTranslate(&hitboxTrans);
+			hitBox->setNextTranslate(&hitboxTrans);
+			hitBox->ignoreAABB = true;
+			ourModel.emplace_back(hitBox);
 
-		hitBox = new CollitionBox(235, translate.y + 5, -200, 1.5f, 10.0f, 1.5f, main->cameraDetails);
-		hitBox->setRotY(-45);
-		hitBox->setNextRotY(-45);
-		ourModel.emplace_back(hitBox);
+			hitboxTrans = glm::vec3(translate.x, translate.y + 1.82, translate.z);
+			hitBox = new CollitionBox(hitboxTrans.x, hitboxTrans.y, hitboxTrans.z, 24.0f, 0.22f, 2.7f, main->cameraDetails);
+			hitBox->walkeable = true;
+			hitBox->setRotY(hitboxrot2);
+			hitBox->setNextRotY(hitboxrot2);
+			hitBox->setTranslate(&hitboxTrans);
+			hitBox->setNextTranslate(&hitboxTrans);
+			hitBox->ignoreAABB = true;
+			ourModel.emplace_back(hitBox);
 
-		hitBox = new CollitionBox(247, translate.y + 10, -200, 2.0f, 6.0f, 2.8f, main->cameraDetails);
-		hitBox->setRotY(0);
-		hitBox->setNextRotY(0);
-		ourModel.emplace_back(hitBox);
+			hitboxTrans = glm::vec3(translate.x, translate.y + 2.26, translate.z);
+			hitBox = new CollitionBox(hitboxTrans.x, hitboxTrans.y, hitboxTrans.z, 23.2f, 0.22f, 2.6f, main->cameraDetails);
+			hitBox->walkeable = true;
+			hitBox->setRotY(hitboxrot2);
+			hitBox->setNextRotY(hitboxrot2);
+			hitBox->setTranslate(&hitboxTrans);
+			hitBox->setNextTranslate(&hitboxTrans);
+			hitBox->ignoreAABB = true;
+			ourModel.emplace_back(hitBox);
 
-		hitBox = new CollitionBox(285, translate.y + 5, -200, 1.5f, 10.0f, 1.5f, main->cameraDetails);
-		hitBox->setRotY(45);
-		hitBox->setNextRotY(45);
-		ourModel.emplace_back(hitBox);
-
-		hitBox = new CollitionBox(273, translate.y + 10, -200, 2.0f, 6.0f, 2.8f, main->cameraDetails);
-		hitBox->setRotY(0);
-		hitBox->setNextRotY(0);
-		ourModel.emplace_back(hitBox);
+			hitboxrot2 += 12;
+		}
 	}
 
 

@@ -92,7 +92,7 @@ class Scene {
 			return false;
 		}
 
-		virtual Model* lookForCollition(glm::vec3 &yPos, bool collitionMovement = false) {
+		virtual Model* lookForCollition(glm::vec4 &yPos, bool collitionMovement = false) {
 			std::vector<Model*> *ourModel = getLoadedModels();
 			Model *camara = getMainModel();
 			for (int i = 0; i < ourModel->size(); i++) {

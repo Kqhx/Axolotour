@@ -237,26 +237,36 @@ public:
 	}
 
 
-	void updatePTDisplay() {
-		std::wstring updatedText = L"Puntos: " + std::to_wstring(static_cast<int>(puntos));
+		void updatePTDisplay() {
+		WCHAR wpuntos[15] = { '\0' };
+		swprintf_s(wpuntos, L"Puntos: %d", (int)puntos);
+//		std::wstring updatedText = L"Puntos: " + std::to_wstring(static_cast<int>(puntos));
 		if (puntosTexto) {
-			puntosTexto->initTexto(updatedText); // Update the text
+//			puntosTexto->initTexto(updatedText); // Update the text
+			puntosTexto->initTexto(wpuntos); // Update the text
 		}
 	}
 
 	void updateHPDisplay() {
-		std::wstring updatedText = std::to_wstring(static_cast<int>(salud)) + L"/100";
+		WCHAR wsalud[10] = { '\0' };
+		swprintf_s(wsalud, L"%d/100", (int)salud);
+//		std::wstring updatedText = std::to_wstring(static_cast<int>(salud)) + L"/100";
 		if (saludTexto) {
-			saludTexto->initTexto(updatedText); // Update the text
+//			saludTexto->initTexto(updatedText); // Update the text
+			saludTexto->initTexto(wsalud); // Update the text
 		}
 	}
 
 	void updateOXDisplay() {
-		std::wstring updatedText = std::to_wstring(static_cast<int>(oxigeno)) + L"/100";
+		WCHAR woxigeno[10] = { '\0' };
+		swprintf_s(woxigeno, L"%d/100", (int)oxigeno);
+//		std::wstring updatedText = std::to_wstring(static_cast<int>(oxigeno)) + L"/100";
 		if (oxigenoTexto) {
-			oxigenoTexto->initTexto(updatedText); // Update the text
+//			oxigenoTexto->initTexto(updatedText); // Update the text
+			oxigenoTexto->initTexto(woxigeno); // Update the text
 		}
 	}
+
 
 	void updateOxygenByPosition(float deltaTime)
 	{

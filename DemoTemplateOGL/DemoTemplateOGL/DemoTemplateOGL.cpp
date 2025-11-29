@@ -157,7 +157,8 @@ int startGameEngine(void *ptrMsg){
     Texto *coordenadas = NULL;
     try{
         OGLobj = new Scenario(model); // Creamos nuestra escena con esa posicion de inicio
-        translate = glm::vec3(-150.0f, OGLobj->getTerreno()->Superficie(-150.0, -185.0), -185.0f);
+        //translate = glm::vec3(-150.0f, OGLobj->getTerreno()->Superficie(-150.0, -185.0), -185.0f;     // Spawn at Mariposa
+        translate = glm::vec3(240.0f, OGLobj->getTerreno()->Superficie(240.0, -160.0), -160.0f);        // Spawn at Hongo
         model->setRotY(30);
         model->setTranslate(&translate);
         model->setNextTranslate(&translate);

@@ -106,9 +106,9 @@ public:
 
     void buildKDtree();
     void buildCollider(float x, float y, float z, float halfWidth, float halfHeight, float halfDepth);
-    bool colisionaCon(ModelAttributes& objeto, glm::vec3 &yPos, bool collitionMove = false, int idx = 0);
+    bool colisionaCon(ModelAttributes& objeto, glm::vec4 &yPos, bool collitionMove = false, int idx = 0);
     bool nodoColisionCon(Model& objeto, std::pair<Node*, Node*>& nodeCollitions, bool collitionMove = false, int idx = 0);
-    static bool colisionaCon(ModelAttributes& objeto0, ModelAttributes& objeto, glm::vec3 &yPos, bool collitionMove = false);
+    static bool colisionaCon(ModelAttributes& objeto0, ModelAttributes& objeto, glm::vec4 &yPos, bool collitionMove = false);
 
     std::unordered_map<string, int>* GetBoneInfoMap();
     std::vector<BoneInfo>* getBonesInfo();
