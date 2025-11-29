@@ -27,6 +27,7 @@ void Scenario::InitGraph(Model *main) {
 	Model* model;
 	ModelAttributes m;
 	Axolotl* axo = getMainAxolotl();
+	this->player = axo;
 	
 
 	// -------------------------------
@@ -63,15 +64,30 @@ void Scenario::InitGraph(Model *main) {
 	// -----     LOAD MODELS     -----
 	// -------------------------------
 	// BOTE
-	model = new Model("KA/Models/Vehicles/boat.fbx", main->cameraDetails);
-	translate = glm::vec3(-205.0f, 11.0f, -260.0f);
-	model->setTranslate(&translate);
-	model->setNextTranslate(&translate);
-	model->walkeable = false;
-	scale = glm::vec3(5.0f, 5.0f, 5.0f);	// it's a bit too big for our scene, so scale it down
-	model->setScale(&scale);
-	model->setNextRotY(180);
-	ourModel.emplace_back(model);
+	Vehicle* boat = new Vehicle("KA/Models/Vehicles/boat.fbx", main->cameraDetails);
+	glm::vec3 boatPos = glm::vec3(-205.0f, 11.0f, -260.0f);
+	boat->setTranslate(&boatPos);
+	boat->setNextTranslate(&boatPos);
+	boat->walkeable = true;
+	boat->setIsActive(false);
+	boat->setIsMountable(true);
+	boat->setIsFlyable(false);
+	boat->setSpeedMult(1.5f);
+	glm::vec3 boatScale = glm::vec3(5.0f, 5.0f, 5.0f);	// it's a bit too big for our scene, so scale it down
+	boat->setScale(&boatScale);
+	boat->setNextRotY(180);
+	this->vehicle = boat;
+	ourModel.emplace_back(boat);
+
+	// Modelo montado
+	Model* boatMounted = new Model("KA/Models/Vehicles/boatmounted.fbx", main->cameraDetails);
+	boatMounted->setScale(&boatScale);
+
+	boat->setMountedModel(boatMounted);
+	boat->setEmptyModel(boat);
+
+	ourModel.emplace_back(boatMounted);
+
 
 	// PYRAMID
 	float y_pyramid = terreno->Superficie(165, -240) - 5;
@@ -468,18 +484,6 @@ void Scenario::InitGraph(Model *main) {
 		int hitboxrot2 = 0;
 		Model* hitBox = NULL;
 
-		// HITBOX AT CENTER
-		glm::vec3 mainHitboxTrans = translate;
-		mainHitboxTrans = glm::vec3(translate.x, translate.y + 5.5, translate.z);
-		hitBox = new CollitionBox(mainHitboxTrans.x, mainHitboxTrans.y, mainHitboxTrans.z, 10.0f, 3.0f, 10.0f, main->cameraDetails);
-		hitBox->walkeable = true;
-		hitBox->setRotY(mainhitboxrot);
-		hitBox->setNextRotY(mainhitboxrot);
-		hitBox->setTranslate(&mainHitboxTrans);
-		hitBox->setNextTranslate(&mainHitboxTrans);
-		hitBox->ignoreAABB = true;
-		ourModel.emplace_back(hitBox);
-
 		// HITBOX FIRST LAYER
 		glm::vec3 hitboxTrans = translate;
 		for (int i = 1; i <= 16; i++) {
@@ -551,6 +555,18 @@ void Scenario::InitGraph(Model *main) {
 
 			hitboxrot2 += 12;
 		}
+
+		// HITBOX AT CENTER
+		glm::vec3 mainHitboxTrans = translate;
+		mainHitboxTrans = glm::vec3(translate.x, translate.y + 2.5, translate.z);
+		hitBox = new CollitionBox(mainHitboxTrans.x, mainHitboxTrans.y, mainHitboxTrans.z, 10.0f, 7.0f, 10.0f, main->cameraDetails);
+		hitBox->walkeable = true;
+		hitBox->setRotY(mainhitboxrot);
+		hitBox->setNextRotY(mainhitboxrot);
+		hitBox->setTranslate(&mainHitboxTrans);
+		hitBox->setNextTranslate(&mainHitboxTrans);
+		hitBox->ignoreAABB = true;
+		ourModel.emplace_back(hitBox);
 	}
 
 

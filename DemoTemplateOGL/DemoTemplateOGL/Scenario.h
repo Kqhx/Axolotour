@@ -20,6 +20,7 @@
 
 #include "KA/Axolotl.h"
 #include "KA/Coin.h"
+#include "KA/Vehicle.h"
 
 class Scenario : public Scene {
 private:
@@ -33,6 +34,9 @@ private:
 	Water* water;
 	float angulo;
 	float animacion = 0;
+	Axolotl* player = nullptr;
+	Vehicle* vehicle = nullptr;
+
 	std::vector<Texto*> ourText;
 public:
 	Scenario(Camera *cam);
@@ -41,7 +45,8 @@ public:
 
 	void placeModelAngel(Model* main);
 
-	//void inicializaBillboards();
+	//void inicializaBillboards(); 
+	Vehicle* getVehicle() { return vehicle; }
 
 	//el metodo render toma el dispositivo sobre el cual va a dibujar
 	//y hace su tarea ya conocida

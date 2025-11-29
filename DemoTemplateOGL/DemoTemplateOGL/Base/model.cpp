@@ -787,8 +787,8 @@ bool Model::colisionaCon(ModelAttributes& objeto0, ModelAttributes& objeto, glm:
                 // Test de ray vs OBB con el modelo de destino
                 if (rayIntersectsOBB(partialPos, stepDir, AABB->meshes.at(0)->vertices, transform2, tMin, tMax)) {
                     if (tMin <= 1.0f && tMax >= 0.0f) {
-                        collide = true; // colisión durante el trayecto
-                        yPos.w = true;
+                        collide = false; // colisión durante el trayecto
+                        yPos.w = false;
                         break;
                     }
                 }

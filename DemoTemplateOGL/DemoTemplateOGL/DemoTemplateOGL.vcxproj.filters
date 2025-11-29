@@ -150,6 +150,9 @@
     <ClInclude Include="KA\Coin.h">
       <Filter>Header Files\KA</Filter>
     </ClInclude>
+    <ClInclude Include="KA\Vehicle.h">
+      <Filter>Header Files\KA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoTemplateOGL.cpp">
@@ -201,6 +204,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KA\MainMenu.cpp">
+      <Filter>Source Files\KA</Filter>
+    </ClCompile>
+    <ClCompile Include="KA\Vehicle.cpp">
       <Filter>Source Files\KA</Filter>
     </ClCompile>
   </ItemGroup>

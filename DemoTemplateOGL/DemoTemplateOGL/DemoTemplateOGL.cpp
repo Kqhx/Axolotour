@@ -184,6 +184,17 @@ int startGameEngine(void *ptrMsg){
         prevActions.jump = &jump;
         mainmenu = new MainMenu(model);
         menu = new Menu(model);
+        Scenario* scenario = dynamic_cast<Scenario*>(OGLobj);
+        Axolotl* player = scenario->getMainAxolotl();
+        Vehicle* vehicle = scenario->getVehicle();
+        Model* controlledEntity = nullptr;
+
+        if (vehicle && vehicle->getIsActive()) {
+            controlledEntity = vehicle->getCurrentModel();  // mounted model
+        }
+        else {
+            controlledEntity = player; // normal player
+        }
     //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         while (isProgramRunning(ptrMsg)) {
             deltasCount += gameTime.deltaTime;
@@ -194,7 +205,7 @@ int startGameEngine(void *ptrMsg){
                 totFrames = 1;
             }
             updatePosCords(coordenadas);
-
+            bool isNear = false;
             GameActions actions;
             actions.jump = &jump;
             // render
@@ -205,7 +216,7 @@ int startGameEngine(void *ptrMsg){
 
                 GameActions actions;
                 actions.jump = &jump;
-                checkInput(&actions, OGLobj);
+                checkInput(&actions, (Scene*)controlledEntity);
 
                 mainmenu->update(mainmenuOption);
                 mainmenu->Render();
@@ -213,7 +224,8 @@ int startGameEngine(void *ptrMsg){
                 swapGLBuffers();
                 continue;
             }
-            bool checkCollition = checkInput(&actions, OGLobj);
+            bool checkCollition = checkInput(&actions, (Scene*)controlledEntity));
+            
             int cambio = OGLobj->update();
             Scene *escena = OGLobj->Render();
             lluvia.Update();
@@ -227,6 +239,23 @@ int startGameEngine(void *ptrMsg){
                 OGLobj = escena;
                 OGLobj->getLoadedText()->emplace_back(fps);
                 OGLobj->getLoadedText()->emplace_back(coordenadas);
+            }
+            if (vehicle) {
+
+                float d = glm::distance(*player->getTranslate(), *vehicle->getTranslate());
+                isNear = (d < 20.0f);
+
+                if (KEYS[input.E]) {
+
+                    if (!vehicle->getIsActive() && isNear) {
+                        vehicle->vehicleEnter(player);
+                    }
+                    else if (vehicle->getIsActive()) {
+                        vehicle->vehicleExit(player);
+                    }
+
+                    KEYS[input.E] = false;
+                }
             }
             swapGLBuffers();
         }

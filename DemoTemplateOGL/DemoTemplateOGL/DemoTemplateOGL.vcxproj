@@ -163,6 +163,7 @@
     <ClInclude Include="KA\Axolotl.h" />
     <ClInclude Include="KA\Coin.h" />
     <ClInclude Include="KA\MainMenu.h" />
+    <ClInclude Include="KA\Vehicle.h" />
     <ClInclude Include="KDTree\CollitionDetection.h" />
     <ClInclude Include="Lluvia.h" />
     <ClInclude Include="Menu.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="Base\font_atlas.cpp" />
     <ClCompile Include="CollitionBox.cpp" />
     <ClCompile Include="KA\MainMenu.cpp" />
+    <ClCompile Include="KA\Vehicle.cpp" />
     <ClCompile Include="KDTree\CollitionDetection.cpp" />
     <ClCompile Include="DemoTemplateOGL.cpp" />
     <ClCompile Include="Base\glad.c" />
