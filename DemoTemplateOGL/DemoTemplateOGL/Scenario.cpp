@@ -116,22 +116,21 @@ void Scenario::InitGraph(Model *main) {
 	ourModel.emplace_back(tula);
 
 	// LIBERTY
-	float y_liberty = terreno->Superficie(-200, 250) + 15;
+	float y_liberty = terreno->Superficie(-225, 235) + 15;
 	Model* liberty = new Model("KA/Models/Structures/LibertyStatue.fbx", main->cameraDetails);
-	translate = glm::vec3(-200.0f, y_liberty, 250.0f);
+	translate = glm::vec3(-225.0f, y_liberty, 235.0f);
 	liberty->setTranslate(&translate);
 	liberty->setNextTranslate(&translate);
-	scale = glm::vec3(6.0f, 6.0f, 6.0f);
+	scale = glm::vec3(4.0f, 4.0f, 4.0f);
 	liberty->setScale(&scale);
-	liberty->setRotX(0);
-	liberty->setNextRotX(0);
-	//for (auto& attr : *liberty->getModelAttributes()) {
-	//	attr.hitbox = NULL;
-	//}
+	liberty->setRotX(90);
+	for (auto& attr : *liberty->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
 	ourModel.emplace_back(liberty);
 
 	// CNTOWER
-	float y_cntower = terreno->Superficie(0, 180)-3;
+	float y_cntower = terreno->Superficie(0, 180)-2.5;
 	Model* tower = new Model("KA/Models/Structures/CNTower.fbx", main->cameraDetails);
 	translate = glm::vec3(0.0f, y_cntower, 180.0f);
 	tower->setTranslate(&translate);
@@ -140,9 +139,9 @@ void Scenario::InitGraph(Model *main) {
 	tower->setScale(&scale);
 	tower->setRotX(-90);
 	tower->setNextRotX(-90);
-	//for (auto& attr : *tower->getModelAttributes()) {
-	//	attr.hitbox = NULL;
-	//}
+	for (auto& attr : *tower->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
 	ourModel.emplace_back(tower);
 
 	// STADIUM
@@ -162,6 +161,18 @@ void Scenario::InitGraph(Model *main) {
 	// Letrero Bienvenida
 	float y_sign = terreno->Superficie(-140, -180) + 1;
 	billBoard.emplace_back( new Billboard((WCHAR*)L"KA/Billboards/Signs/Welcome.png", 3, 3, -140, y_sign, -180, camara->cameraDetails)
+	);
+	// Letrero Monedas
+	y_sign = terreno->Superficie(-220, -220) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/SignCoin.png", 3, 3, -220, y_sign, -220, camara->cameraDetails)
+	);
+	// Letrero Fun Fact #1
+	y_sign = terreno->Superficie(-140, -195) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF1.png", 3, 3, -140, y_sign, -195, camara->cameraDetails)
+	);
+	// Letrero Fun Fact #2
+	y_sign = terreno->Superficie(240, -160) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF2.png", 3, 3, 240, y_sign, -160, camara->cameraDetails)
 	);
 
 	// árbol 1
@@ -346,50 +357,93 @@ void Scenario::InitGraph(Model *main) {
 		ERRORL("Could not load spin animation!", "ANIMACION COIN");
 	}
 
-	//posCoin = glm::vec3(x, terreno->Superficie(x, y) + 2, y);
-	//coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
-	//coin->setTranslate(&posCoin);
-	//coin->setNextTranslate(&posCoin);
-	//scale = glm::vec3(5, 5, 5);
-	//coin->setScale(&scale);
-	//for (auto& attr : *coin->getModelAttributes()) {
-	//	attr.hitbox = NULL;
-	//}
-	//ourModel.emplace_back(coin);
-	//try {
-	//	std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-	//	std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-	//	std::move(animation.begin(), animation.end(), std::back_inserter(animations));
-	//	for (Animation animation : animations)
-	//		coin->setAnimator(Animator(animation));
-	//	coin->setAnimation(1);
-	//}
-	//catch (...) {
-	//	ERRORL("Could not load spin animation!", "ANIMACION COIN");
-	//}
+	posCoin = glm::vec3(-210, terreno->Superficie(-210, 215) + 2, 215);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
 
+	posCoin = glm::vec3(-20, terreno->Superficie(-20, -185) + 2, -185);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
 
-	// Map
-	Billboard2D* miniMap = new Billboard2D(
-		(WCHAR*)L"KA/Billboards/Map.png",
-		12, 12,
-		1920 - 250, 250, 0,
-		camara->cameraDetails
-	);
-	scale = glm::vec3(450, 450, 0);
-	miniMap->setScale(&scale);
-	billBoard2D.emplace_back(miniMap);
+	posCoin = glm::vec3(35, terreno->Superficie(35, 170) + 2, 170);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
 
-	// Pointer
-	Billboard2D* locator = new Billboard2D(
-		(WCHAR*)L"KA/Billboards/Locator.png",
-		2, 2,
-		1920 - 250, 250, 0,
-		camara->cameraDetails
-	);
-	scale = glm::vec3(20, 20, 0);
-	locator->setScale(&scale);
-	billBoard2D.emplace_back(locator);
+	posCoin = glm::vec3(-25, terreno->Superficie(-25, 290) + 2, 290);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
 
 	
 }
@@ -502,6 +556,7 @@ Scene* Scenario::Render() {
 	Axolotl* axo = getMainAxolotl();
 	if (axo) {
 		axo->updateOxygenByPosition(gameTime.deltaTime/100);
+		axo->updateLocatorPosition();
 	}
 	for (auto& m : ourModel) {
 		Coin* c = dynamic_cast<Coin*>(m);

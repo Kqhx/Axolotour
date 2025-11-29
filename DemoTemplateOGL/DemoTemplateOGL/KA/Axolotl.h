@@ -34,6 +34,7 @@ public:
 		showOX();
 		showPT();
 		initTextDisplay();
+		initMiniMap();
 		gameOver();
 		gameWin();
 	}
@@ -44,6 +45,7 @@ public:
 		showOX();
 		showPT();
 		initTextDisplay();
+		initMiniMap();
 		gameOver();
 		gameWin();
 	}
@@ -54,6 +56,7 @@ public:
 		showOX();
 		showPT();
 		initTextDisplay();
+		initMiniMap();
 		gameOver();
 		gameWin();
 	}
@@ -64,6 +67,7 @@ public:
 		showOX();
 		showPT();
 		initTextDisplay();
+		initMiniMap();
 		gameOver();
 		gameWin();
 	}
@@ -162,7 +166,7 @@ public:
 				INFO("Perdiste tu última vida", "CONTINUE");
 			}
 			salud = 100; // Reset health after losing a life
-			oxigeno = 50; // Reset oxygen after losing a life
+			oxigeno = 100; // Reset oxygen after losing a life
 			updateHP();
 			updateOX();
 		}
@@ -189,11 +193,11 @@ public:
 
 	void updatePT() {
 		//Calculate progress percentage
-		float ptPercent = puntos / 6.0f;
+		float ptPercent = puntos / 10.0f;
 		glm::vec3 scale = glm::vec3(320.0f * ptPercent, 32.0f, 0.0f);
 		puntosBarTop->setScale(&scale);
 		updatePTDisplay();
-		if ((puntos/6.0f) == 1) {
+		if ((puntos/10.0f) == 1) {
 			showGameWin();
 		}
 	}
@@ -209,6 +213,29 @@ public:
 		oxigenoTexto = new Texto(initialText3, 20.0f, 0.0f, 150.0f, 240.0f, 0.0f, this);
 		updateOXDisplay();
 	}
+
+	void initMiniMap() {
+		// Crear Locator
+		locator = new Billboard2D(
+			(WCHAR*)L"KA/Billboards/Locator.png",
+			2.5, 2.5,
+			1920 - 250, 250, 0,
+			this->cameraDetails
+		);
+		glm::vec3 locScale = glm::vec3(25, 25, 0);
+		locator->setScale(&locScale);
+
+		// Crear Mapa
+		minimap = new Billboard2D(
+			(WCHAR*)L"KA/Billboards/Map.png",
+			12, 12,
+			1920 - 250, 250, 0,
+			this->cameraDetails
+		);
+		glm::vec3 mapScale = glm::vec3(450, 450, 0);
+		minimap->setScale(&mapScale);
+	}
+
 
 	void updatePTDisplay() {
 		std::wstring updatedText = L"Puntos: " + std::to_wstring(static_cast<int>(puntos));
@@ -238,7 +265,7 @@ public:
 		// Si está debajo de y10 -> bajo el agua
 		if (pos.y < 10.0f)
 		{
-			oxigeno -= 1.5f * deltaTime;   // Ajusta velocidad según prefieras
+			oxigeno -= 0.5f * deltaTime;   // Ajusta velocidad según prefieras
 
 			if (oxigeno <= 0.0f)
 			{
@@ -258,6 +285,39 @@ public:
 			updateOX();
 		}
 	}
+
+	void updateLocatorPosition() {
+
+		glm::vec3 pos = *getTranslate();  // posición del axolotl
+		float ax = pos.x;
+		float az = pos.z;
+
+		float worldSize = 800.0f;
+		float mapPixels = 2048.0f;
+		float canvasPixels = 2500.0f;
+
+		float border = (canvasPixels - mapPixels) / 2.0f;
+		float mapScale = 450.0f / canvasPixels;
+
+		float normX = (ax + worldSize / 2) / worldSize;
+		float normZ = (az + worldSize / 2) / worldSize;
+
+		float px = border + normX * mapPixels;
+		float pz = border + normZ * mapPixels;
+
+		px *= mapScale;
+		pz *= mapScale;
+
+		float mapCenterX = 1920 - 250;
+		float mapCenterY = 250;
+
+		float finalX = mapCenterX - 225 + px;
+		float finalY = mapCenterY - 225 + pz;
+
+		glm::vec3 newPos(finalX, finalY, 0);
+		locator->setTranslate(&newPos);
+	}
+
 
 	void gameOver() {
 		gameOverBillboard = new Billboard2D((WCHAR*)L"KA/GUI/Menus/GameOver.png", 2, 2, (SCR_WIDTH - 200) / 2, (SCR_HEIGHT - 200) / 2, 0, this->cameraDetails); // Centered on screen
@@ -320,6 +380,9 @@ public:
 		for (auto vida : hearts) {
 			vida->Draw();
 		}
+
+		locator->Draw();
+		minimap->Draw();
 
 		healthBarTop->Draw();
 		healthBarBot->Draw();
