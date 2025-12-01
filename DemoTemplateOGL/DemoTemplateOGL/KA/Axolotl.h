@@ -163,7 +163,7 @@ public:
 				INFO(msg, "CONTINUE");
 			}
 			else {
-				INFO("Perdiste tu última vida", "CONTINUE");
+				INFO("Perdiste tu ï¿½ltima vida", "CONTINUE");
 			}
 			salud = 100; // Reset health after losing a life
 			oxigeno = 100; // Reset oxygen after losing a life
@@ -272,22 +272,22 @@ public:
 	{
 		glm::vec3 pos = *getTranslate();
 
-		// Si está debajo de y10 -> bajo el agua
+		// Si estï¿½ debajo de y10 -> bajo el agua
 		if (pos.y < 10.0f)
 		{
-			oxigeno -= 0.5f * deltaTime;   // Ajusta velocidad según prefieras
+			oxigeno -= 0.5f * deltaTime;   // Ajusta velocidad segï¿½n prefieras
 
 			if (oxigeno <= 0.0f)
 			{
 				oxigeno = 0.0f;
-				reduceHealth(0.1f);  // dañarlo si no tiene oxígeno
+				reduceHealth(0.1f);  // daï¿½arlo si no tiene oxï¿½geno
 			}
 
 			updateOX();
 		}
 		else
 		{
-			// Opcional: si sale del agua, recupera oxígeno lentamente
+			// Opcional: si sale del agua, recupera oxï¿½geno lentamente
 			oxigeno += 0.5f * deltaTime;
 			if (oxigeno > 100.0f)
 				oxigeno = 100.0f;
@@ -298,7 +298,7 @@ public:
 
 	void updateLocatorPosition() {
 
-		glm::vec3 pos = *getTranslate();  // posición del axolotl
+		glm::vec3 pos = *getTranslate();  // posiciï¿½n del axolotl
 		float ax = pos.x;
 		float az = pos.z;
 
@@ -370,7 +370,7 @@ public:
 		if (gameOverVisible) {
 			gameOverBillboard->Draw();
 
-			if (MessageBox(NULL, L"No te rindas! tus esfuerzos no han sido en vano. ¿Deseas volver a intentarlo?",
+			if (MessageBox(NULL, L"No te rindas! tus esfuerzos no han sido en vano. ï¿½Deseas volver a intentarlo?",
 				L"GAME OVER", MB_OKCANCEL | MB_ICONINFORMATION) == IDOK) {
 				exit(0);
 			}

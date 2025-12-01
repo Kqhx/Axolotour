@@ -14,9 +14,12 @@ void Vehicle::vehicleEnter(Axolotl* axo) {
     // ocultar empty y ocultar player
     emptyModel->setActive(false);
     axo->setActive(false);
+    Model* hitbox = (Model*)axo->getModelAttributes()->at(0).hitbox;
+    hitbox->setActive(false);
 
     // activar mounted
     mountedModel->setActive(true);
+    emptyModel->setActive(false);
 }
 
 
@@ -33,6 +36,8 @@ void Vehicle::vehicleExit(Axolotl* axo) {
     axo->setTranslate(&pos);
     axo->setNextTranslate(&pos);
     axo->setActive(true);
+    Model* hitbox = (Model*)axo->getModelAttributes()->at(0).hitbox;
+    hitbox->setActive(true);
 
     // mostrar empty
     emptyModel->setTranslate(&pos);
@@ -43,4 +48,8 @@ void Vehicle::vehicleExit(Axolotl* axo) {
     mountedModel->setActive(false);
 
     axolotlModel = nullptr;
+}
+
+void Vehicle::Draw() {
+    getCurrentModel()->Model::Draw();
 }

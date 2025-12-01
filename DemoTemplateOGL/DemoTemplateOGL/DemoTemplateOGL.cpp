@@ -216,7 +216,7 @@ int startGameEngine(void *ptrMsg){
 
                 GameActions actions;
                 actions.jump = &jump;
-                checkInput(&actions, (Scene*)controlledEntity);
+                checkInput(&actions, (Scene*)OGLobj);
 
                 mainmenu->update(mainmenuOption);
                 mainmenu->Render();
@@ -224,9 +224,9 @@ int startGameEngine(void *ptrMsg){
                 swapGLBuffers();
                 continue;
             }
-            bool checkCollition = checkInput(&actions, (Scene*)controlledEntity));
+            bool checkCollition = checkInput(&actions, (Scene*)OGLobj);
             
-            int cambio = OGLobj->update();
+            int cambio = OGLobj->update(&actions);
             Scene *escena = OGLobj->Render();
             lluvia.Update();
             lluvia.Draw();

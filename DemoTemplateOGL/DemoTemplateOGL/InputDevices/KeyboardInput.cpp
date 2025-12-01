@@ -88,6 +88,10 @@ bool KeysEvents(GameActions *actions){
 		actions->action = true;
 		KEYS[input.Enter] = false;
 	}
+	if (KEYS[input.E]) {
+		actions->inVehicule = true;
+		KEYS[input.E] = false;
+	}
 	if (KEYS[input.P]) {
 		actions->firstPerson = true;
 		KEYS[input.P] = false;

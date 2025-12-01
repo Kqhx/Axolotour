@@ -407,6 +407,8 @@ ModelCollider Model::update(float terrainY, std::vector<Model*>& models, glm::ve
                     collide.attrIdx = j;
                 }
                 else {
+                    collide.model = other;
+                    collide.attrIdx = j;
                     if (yPos.w == false && nextGPosition.y > (yPos.y * 0.90)) {
                         nextGPosition.y = yPos.y;
                         setNextTranslate(&nextGPosition, idx);
@@ -445,8 +447,6 @@ ModelCollider Model::update(float terrainY, std::vector<Model*>& models, glm::ve
                 break;
             }
         }
-        if (collide.model != NULL)
-            break;
         if (i < 0) i = 0;
     }
 
@@ -832,7 +832,7 @@ bool Model::colisionaCon(ModelAttributes& objeto0, ModelAttributes& objeto, glm:
     // Verificar si las proyecciones de los cubos se solapan en cada eje
     for (int i = 0; i < 15; i++) {
         if (!proyectarYComprobarSolapamiento(verticesCubo1, verticesCubo2, ejes[i])) {
-            return false; // No hay solapamiento en este eje, no hay colisión
+            return false || collide; // No hay solapamiento en este eje, no hay colisión
         }
     }
 

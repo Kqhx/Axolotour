@@ -64,7 +64,7 @@ public:
 	void setAngulo(float angulo);
 	SkyDome* getSky();
 	Terreno* getTerreno();
-//    void update() override;
+	int update(GameActions* actions = NULL);
     ~Scenario();
 };
 

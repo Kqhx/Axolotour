@@ -64,6 +64,7 @@ struct GameActions {
 	bool ctrlPressed = false;
 	bool firstPerson = false;
 	bool lockMouse = false;
+	bool inVehicule = false;
 	double *jump = NULL;
 	bool action = false;
 	bool displayHitboxStats = false;

@@ -26,8 +26,8 @@ void Scenario::InitGraph(Model *main) {
 	camara = main;
 	Model* model;
 	ModelAttributes m;
+	this->player = (Axolotl*)main;
 	Axolotl* axo = getMainAxolotl();
-	this->player = axo;
 	
 
 	// -------------------------------
@@ -63,9 +63,20 @@ void Scenario::InitGraph(Model *main) {
 	// -------------------------------
 	// -----     LOAD MODELS     -----
 	// -------------------------------
+
+	// Modelo montado
+	Model* boatMounted = new Model("KA/Models/Vehicles/boatmounted.fbx", main->cameraDetails);
+	glm::vec3 boatPos = glm::vec3(-205.0f, 11.0f, -260.0f);
+	glm::vec3 boatScale = glm::vec3(5.0f, 5.0f, 5.0f);	// it's a bit too big for our scene, so scale it down
+	boatMounted->setScale(&boatScale);
+	boatMounted->setNextRotY(180);
+	boatMounted->setTranslate(&boatPos);
+	boatMounted->setNextTranslate(&boatPos);
 	// BOTE
 	Vehicle* boat = new Vehicle("KA/Models/Vehicles/boat.fbx", main->cameraDetails);
-	glm::vec3 boatPos = glm::vec3(-205.0f, 11.0f, -260.0f);
+	boat->setMountedModel(boatMounted);
+	boat->setEmptyModel(boat);
+
 	boat->setTranslate(&boatPos);
 	boat->setNextTranslate(&boatPos);
 	boat->walkeable = true;
@@ -73,21 +84,12 @@ void Scenario::InitGraph(Model *main) {
 	boat->setIsMountable(true);
 	boat->setIsFlyable(false);
 	boat->setSpeedMult(1.5f);
-	glm::vec3 boatScale = glm::vec3(5.0f, 5.0f, 5.0f);	// it's a bit too big for our scene, so scale it down
 	boat->setScale(&boatScale);
 	boat->setNextRotY(180);
 	this->vehicle = boat;
 	ourModel.emplace_back(boat);
 
-	// Modelo montado
-	Model* boatMounted = new Model("KA/Models/Vehicles/boatmounted.fbx", main->cameraDetails);
-	boatMounted->setScale(&boatScale);
-
-	boat->setMountedModel(boatMounted);
-	boat->setEmptyModel(boat);
-
-	ourModel.emplace_back(boatMounted);
-
+//	ourModel.emplace_back(boatMounted); //Boat tiene tanto el modelo vacio como el modelo montado, tons no creo que se ocupe
 
 	// PYRAMID
 	float y_pyramid = terreno->Superficie(165, -240) - 5;
@@ -217,22 +219,22 @@ void Scenario::InitGraph(Model *main) {
 	// -------------------------------
 	// -----  LOAD WORLDBORDERS  -----
 	// -------------------------------
-	Model* worldBorder = new CollitionBox(0.0f, 0.0f, 400.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
-	worldBorder->setRotY(0);
-	worldBorder->setNextRotY(0);
-	ourModel.emplace_back(worldBorder);
-	worldBorder = new CollitionBox(400.0f, 0.0f, 0.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
-	worldBorder->setRotY(90);
-	worldBorder->setNextRotY(90);
-	ourModel.emplace_back(worldBorder);
-	worldBorder = new CollitionBox(0.0f, 0.0f, -400.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
-	worldBorder->setRotY(0);
-	worldBorder->setNextRotY(0);
-	ourModel.emplace_back(worldBorder);
-	worldBorder = new CollitionBox(-400.0f, 0.0f, 0.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
-	worldBorder->setRotY(90);
-	worldBorder->setNextRotY(90);
-	ourModel.emplace_back(worldBorder);
+	//Model* worldBorder = new CollitionBox(0.0f, 0.0f, 400.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
+	//worldBorder->setRotY(0);
+	//worldBorder->setNextRotY(0);
+	//ourModel.emplace_back(worldBorder);
+	//worldBorder = new CollitionBox(400.0f, 0.0f, 0.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
+	//worldBorder->setRotY(90);
+	//worldBorder->setNextRotY(90);
+	//ourModel.emplace_back(worldBorder);
+	//worldBorder = new CollitionBox(0.0f, 0.0f, -400.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
+	//worldBorder->setRotY(0);
+	//worldBorder->setNextRotY(0);
+	//ourModel.emplace_back(worldBorder);
+	//worldBorder = new CollitionBox(-400.0f, 0.0f, 0.0f, 400.0f, 50.0f, 10.0f, main->cameraDetails);
+	//worldBorder->setRotY(90);
+	//worldBorder->setNextRotY(90);
+	//ourModel.emplace_back(worldBorder);
 
 
 	// -------------------------------
@@ -676,7 +678,7 @@ Model* Scenario::getMainModel() {
 	return this->camara;
 }
 Axolotl* Scenario::getMainAxolotl() {
-	return dynamic_cast<Axolotl*>(this->camara);
+	return dynamic_cast<Axolotl*>(this->player);
 }
 void Scenario::setMainModel(Model* mainModel){
 	this->camara = mainModel;
@@ -723,4 +725,53 @@ Scenario::~Scenario() {
 			if (ourModel[i] != camara)
 			delete ourModel[i];
 	this->ourModel.clear();
+}
+
+int Scenario::update(GameActions* actions) {
+	float angulo = getAngulo() + 1.5 * gameTime.deltaTime / 100;
+	angulo = angulo >= 360 ? angulo - 360.0 : angulo;
+	setAngulo(angulo);
+	getSky()->setRotY(angulo);
+	// Actualizar ciclo día/noche
+	getSky()->update(gameTime.deltaTime / 1000.0f);
+	Model* camara = getMainModel();
+	for (int i = 0; i < getLoadedModels()->size(); i++) {
+		auto it = getLoadedModels()->begin() + i;
+		Model* collider = NULL, * model = *it;
+		for (int j = 0; j < model->getModelAttributes()->size(); j++) {
+			int idxCollider = -1;
+			bool objInMovement = (*model->getNextTranslate(j)) != (*model->getTranslate(j));
+			glm::vec3& posM = objInMovement ? *model->getNextTranslate(j) : *model->getTranslate(j);
+			glm::vec3 ejeColision = glm::vec3(0);
+			bool isPrincipal = model == camara; // Si es personaje principal, activa gravedad
+			float terrainY = getTerreno()->Superficie(posM.x, posM.z);
+			ModelCollider mcollider = model->update(terrainY, *getLoadedModels(), ejeColision, isPrincipal, j);
+			if (mcollider.model != NULL) {
+				collider = (Model*)mcollider.model;
+				idxCollider = mcollider.attrIdx;
+			}
+			if (collider != NULL && model == camara && model->name.compare("boat") != 0) {
+				if (collider->name.compare("boat") == 0) {
+					if (actions != NULL && actions->inVehicule) { // primero validar si es != NULL si lo es presionaste la tecla?
+						Vehicle* vehicule = (Vehicle*)collider;
+						vehicule->vehicleEnter(this->player);
+						this->setMainModel(vehicule);
+					}
+				}
+			} if (model == camara && model->name.compare("boat") == 0) {
+				if (actions != NULL && actions->inVehicule) {
+					Scenario* current = (Scenario*)this; // Esto deberia estar en Scenario.cpp 
+					//para que esta copia sea la que se use cada update y no hacer este cast
+					Vehicle* vehicule = (Vehicle*)camara;
+					vehicule->vehicleExit(this->player);
+					current->setMainModel(player);
+				}
+			}
+			if (j < 0) j = 0;
+		}
+		if (i < 0) i = 0;
+	}
+	// Actualizamos la camara
+	camara->cameraDetails->CamaraUpdate(camara->getRotY(), camara->getTranslate());
+	return -1;
 }

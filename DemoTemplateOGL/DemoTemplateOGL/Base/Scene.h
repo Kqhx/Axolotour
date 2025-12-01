@@ -29,7 +29,7 @@ class Scene {
 		virtual ~Scene(){
 		};
 
-		virtual int update(){
+		virtual int update(GameActions *actions = NULL){
             float angulo = getAngulo() + 1.5 * gameTime.deltaTime / 100;
             angulo = angulo >= 360 ? angulo - 360.0 : angulo;
             setAngulo(angulo);
