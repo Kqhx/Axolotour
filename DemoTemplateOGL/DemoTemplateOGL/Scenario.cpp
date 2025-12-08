@@ -241,97 +241,10 @@ void Scenario::InitGraph(Model *main) {
 	// -----     LOAD OTHERS     -----
 	// -------------------------------
 	
-	glm::vec3 posCoin = glm::vec3(155, terreno->Superficie(155, -110) + 2, -110);
+	//MONEDA INICIAL
+	glm::vec3 posCoin = glm::vec3(-230, terreno->Superficie(-230, -230) + 2, -230);
 	Coin* coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
-	coin->setTranslate(&posCoin);
-	coin->setNextTranslate(&posCoin);
-	scale = glm::vec3(5, 5, 5);
-	coin->setScale(&scale);
-	for (auto& attr : *coin->getModelAttributes()) {
-		attr.hitbox = NULL;
-	}
-	ourModel.emplace_back(coin);
-	try {
-		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::vector<Animation> animation = Animation::loadAllAnimations( "KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
-		for (Animation animation : animations)
-			coin->setAnimator(Animator(animation));
-		coin->setAnimation(1);
-	}
-	catch (...) {
-		ERRORL("Could not load spin animation!", "ANIMACION COIN");
-	}
-
-	posCoin = glm::vec3(270, terreno->Superficie(270, -190) + 2, -190);
-	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
-	coin->setTranslate(&posCoin);
-	coin->setNextTranslate(&posCoin);
-	scale = glm::vec3(5, 5, 5);
-	coin->setScale(&scale);
-	for (auto& attr : *coin->getModelAttributes()) {
-		attr.hitbox = NULL;
-	}
-	ourModel.emplace_back(coin);
-	try {
-		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
-		for (Animation animation : animations)
-			coin->setAnimator(Animator(animation));
-		coin->setAnimation(1);
-	}
-	catch (...) {
-		ERRORL("Could not load spin animation!", "ANIMACION COIN");
-	}
-
-	posCoin = glm::vec3(165, terreno->Superficie(165, -240) + 2, -240);
-	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
-	coin->setTranslate(&posCoin);
-	coin->setNextTranslate(&posCoin);
-	scale = glm::vec3(5, 5, 5);
-	coin->setScale(&scale);
-	for (auto& attr : *coin->getModelAttributes()) {
-		attr.hitbox = NULL;
-	}
-	ourModel.emplace_back(coin);
-	try {
-		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
-		for (Animation animation : animations)
-			coin->setAnimator(Animator(animation));
-		coin->setAnimation(1);
-	}
-	catch (...) {
-		ERRORL("Could not load spin animation!", "ANIMACION COIN");
-	}
-
-	posCoin = glm::vec3(10, terreno->Superficie(10, -5) + 2, -5);
-	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
-	coin->setTranslate(&posCoin);
-	coin->setNextTranslate(&posCoin);
-	scale = glm::vec3(5, 5, 5);
-	coin->setScale(&scale);
-	coin->setNextRotY(180);
-	for (auto& attr : *coin->getModelAttributes()) {
-		attr.hitbox = NULL;
-	}
-	ourModel.emplace_back(coin);
-	try {
-		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
-		for (Animation animation : animations)
-			coin->setAnimator(Animator(animation));
-		coin->setAnimation(1);
-	}
-	catch (...) {
-		ERRORL("Could not load spin animation!", "ANIMACION COIN");
-	}
-
-	posCoin = glm::vec3(-230, terreno->Superficie(-230, -230) + 2, -230);
-	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_INICIAL);
 	coin->setTranslate(&posCoin);
 	coin->setNextTranslate(&posCoin);
 	scale = glm::vec3(5, 5, 5);
@@ -353,52 +266,10 @@ void Scenario::InitGraph(Model *main) {
 		ERRORL("Could not load spin animation!", "ANIMACION COIN");
 	}
 
-	posCoin = glm::vec3(165, terreno->Superficie(165, 190) + 2, 190);
-	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
-	coin->setTranslate(&posCoin);
-	coin->setNextTranslate(&posCoin);
-	scale = glm::vec3(5, 5, 5);
-	coin->setScale(&scale);
-	for (auto& attr : *coin->getModelAttributes()) {
-		attr.hitbox = NULL;
-	}
-	ourModel.emplace_back(coin);
-	try {
-		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
-		for (Animation animation : animations)
-			coin->setAnimator(Animator(animation));
-		coin->setAnimation(1);
-	}
-	catch (...) {
-		ERRORL("Could not load spin animation!", "ANIMACION COIN");
-	}
-
-	posCoin = glm::vec3(-210, terreno->Superficie(-210, 215) + 2, 215);
-	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
-	coin->setTranslate(&posCoin);
-	coin->setNextTranslate(&posCoin);
-	scale = glm::vec3(5, 5, 5);
-	coin->setScale(&scale);
-	for (auto& attr : *coin->getModelAttributes()) {
-		attr.hitbox = NULL;
-	}
-	ourModel.emplace_back(coin);
-	try {
-		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
-		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
-		for (Animation animation : animations)
-			coin->setAnimator(Animator(animation));
-		coin->setAnimation(1);
-	}
-	catch (...) {
-		ERRORL("Could not load spin animation!", "ANIMACION COIN");
-	}
-
+	//MONEDA ACUATICA
 	posCoin = glm::vec3(-20, terreno->Superficie(-20, -185) + 2, -185);
 	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_ACUATICA);
 	coin->setTranslate(&posCoin);
 	coin->setNextTranslate(&posCoin);
 	scale = glm::vec3(5, 5, 5);
@@ -419,8 +290,107 @@ void Scenario::InitGraph(Model *main) {
 		ERRORL("Could not load spin animation!", "ANIMACION COIN");
 	}
 
+	//MONEDA PIRAMIDE
+	posCoin = glm::vec3(165, terreno->Superficie(165, -240) + 2, -240);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_PIRAMIDE);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
+
+	//MONEDA ANGEL
+	posCoin = glm::vec3(270, terreno->Superficie(270, -190) + 2, -190);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_ANGEL);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
+
+	//MONEDA TULA
+	posCoin = glm::vec3(155, terreno->Superficie(155, -110) + 2, -110);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_TULA);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations( "KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
+
+	//MONEDA SECRETA
+	posCoin = glm::vec3(10, terreno->Superficie(10, -5) + 1, -5);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_SECRETA);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(2, 2, 2);
+	coin->setScale(&scale);
+	coin->setNextRotY(180);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
+	
+	//MONEDA CNTOWER
 	posCoin = glm::vec3(35, terreno->Superficie(35, 170) + 2, 170);
 	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_CNTOWER);
 	coin->setTranslate(&posCoin);
 	coin->setNextTranslate(&posCoin);
 	scale = glm::vec3(5, 5, 5);
@@ -441,8 +411,58 @@ void Scenario::InitGraph(Model *main) {
 		ERRORL("Could not load spin animation!", "ANIMACION COIN");
 	}
 
-	posCoin = glm::vec3(-25, terreno->Superficie(-25, 290) + 2, 290);
+	//MONEDA LIBERTAD
+	posCoin = glm::vec3(-210, terreno->Superficie(-210, 215) + 2, 215);
 	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_LIBERTY);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(5, 5, 5);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
+
+	//MONEDA CATARATAS
+	posCoin = glm::vec3(-25, terreno->Superficie(-25, 290) + 1, 290);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_FALLS);
+	coin->setTranslate(&posCoin);
+	coin->setNextTranslate(&posCoin);
+	scale = glm::vec3(3, 3, 3);
+	coin->setScale(&scale);
+	for (auto& attr : *coin->getModelAttributes()) {
+		attr.hitbox = NULL;
+	}
+	ourModel.emplace_back(coin);
+	try {
+		std::vector<Animation> animations = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::vector<Animation> animation = Animation::loadAllAnimations("KA/Animations/Deco/Coin_Spin.fbx", coin->GetBoneInfoMap(), coin->getBonesInfo(), coin->GetBoneCount());
+		std::move(animation.begin(), animation.end(), std::back_inserter(animations));
+		for (Animation animation : animations)
+			coin->setAnimator(Animator(animation));
+		coin->setAnimation(1);
+	}
+	catch (...) {
+		ERRORL("Could not load spin animation!", "ANIMACION COIN");
+	}
+
+	//MONEDA ESTADIO
+	posCoin = glm::vec3(165, terreno->Superficie(165, 190) + 2, 190);
+	coin = new Coin("KA/Models/Deco/Coin.fbx", main->cameraDetails);
+	coin->setCoinId(Coin::MONEDA_FINAL);
 	coin->setTranslate(&posCoin);
 	coin->setNextTranslate(&posCoin);
 	scale = glm::vec3(5, 5, 5);
@@ -607,10 +627,7 @@ Scene* Scenario::Render() {
 		Coin* c = dynamic_cast<Coin*>(m);
 		if (c && !c->isTaken()) {
 
-			glm::vec3 a = *axo->getTranslate();
-			glm::vec3 b = *c->getTranslate();
-
-			float d = glm::distance(a, b);
+			float d = glm::distance(*axo->getTranslate(), *c->getTranslate());
 
 			if (d < 4.0f) { // radio de recogida
 				c->take();

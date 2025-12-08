@@ -163,7 +163,7 @@ public:
 				INFO(msg, "CONTINUE");
 			}
 			else {
-				INFO("Perdiste tu �ltima vida", "CONTINUE");
+				INFO("Perdiste tu ultima vida", "CONTINUE");
 			}
 			salud = 100; // Reset health after losing a life
 			oxigeno = 100; // Reset oxygen after losing a life
@@ -237,7 +237,7 @@ public:
 	}
 
 
-		void updatePTDisplay() {
+	void updatePTDisplay() {
 		WCHAR wpuntos[15] = { '\0' };
 		swprintf_s(wpuntos, L"Puntos: %d", (int)puntos);
 //		std::wstring updatedText = L"Puntos: " + std::to_wstring(static_cast<int>(puntos));
@@ -275,19 +275,19 @@ public:
 		// Si est� debajo de y10 -> bajo el agua
 		if (pos.y < 10.0f)
 		{
-			oxigeno -= 0.5f * deltaTime;   // Ajusta velocidad seg�n prefieras
+			oxigeno -= 0.5f * deltaTime;   // Ajusta velocidad segun prefieras
 
 			if (oxigeno <= 0.0f)
 			{
 				oxigeno = 0.0f;
-				reduceHealth(0.1f);  // da�arlo si no tiene ox�geno
+				reduceHealth(0.1f);  // danarlo si no tiene oxigeno
 			}
 
 			updateOX();
 		}
 		else
 		{
-			// Opcional: si sale del agua, recupera ox�geno lentamente
+			// Opcional: si sale del agua, recupera oxigeno lentamente
 			oxigeno += 0.5f * deltaTime;
 			if (oxigeno > 100.0f)
 				oxigeno = 100.0f;
@@ -298,7 +298,7 @@ public:
 
 	void updateLocatorPosition() {
 
-		glm::vec3 pos = *getTranslate();  // posici�n del axolotl
+		glm::vec3 pos = *getTranslate();  // posicion del axolotl
 		float ax = pos.x;
 		float az = pos.z;
 
