@@ -272,8 +272,8 @@ public:
 	{
 		glm::vec3 pos = *getTranslate();
 
-		// Si est� debajo de y10 -> bajo el agua
-		if (pos.y < 10.0f)
+		// Si esta debajo de y10 -> bajo el agua
+		if (pos.y < (10.0f-0.25f))
 		{
 			oxigeno -= 0.5f * deltaTime;   // Ajusta velocidad segun prefieras
 
@@ -288,7 +288,7 @@ public:
 		else
 		{
 			// Opcional: si sale del agua, recupera oxigeno lentamente
-			oxigeno += 0.5f * deltaTime;
+			oxigeno += 0.75f * deltaTime;
 			if (oxigeno > 100.0f)
 				oxigeno = 100.0f;
 
@@ -296,9 +296,8 @@ public:
 		}
 	}
 
-	void updateLocatorPosition() {
-
-		glm::vec3 pos = *getTranslate();  // posicion del axolotl
+	void updateLocatorPosition(glm::vec3 pos) {
+		// posicion del axolotl
 		float ax = pos.x;
 		float az = pos.z;
 

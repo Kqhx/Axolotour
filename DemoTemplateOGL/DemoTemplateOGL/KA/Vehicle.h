@@ -3,6 +3,8 @@
 #include "../Base/Model.h"
 #include "../KA/Axolotl.h"
 
+class Terreno;
+
 class Vehicle : public Model {
 private:
 	bool isActive = false;
@@ -11,6 +13,8 @@ private:
 	Model* emptyModel = nullptr;
 	Model* mountedModel = nullptr;
 	Axolotl* axolotlModel = nullptr;
+	Terreno* terrain = nullptr;
+	void* terrainObj = nullptr;
 	float speedMult = 1.0f;
 public:
 	Vehicle() {
@@ -52,8 +56,11 @@ public:
 	void setSpeedMult(float newSpeedMult) { speedMult = newSpeedMult; }
 	void setEmptyModel(Model* m) { emptyModel = m; }
 	void setMountedModel(Model* m) { mountedModel = m; }
-	virtual void setNextTranslate(glm::vec3* translate, int idx = 0) { getCurrentModel()->Model::setNextTranslate(translate, idx); }
-	virtual void setTranslate(glm::vec3* translate, int idx = 0) { getCurrentModel()->Model::setTranslate(translate, idx); }
+	void setTerrain(Terreno* t);
+	virtual void setNextTranslate(glm::vec3* translate, int idx = 0) override;
+	virtual void setTranslate(glm::vec3* translate, int idx = 0) override;
+
+
 	virtual void setScale(glm::vec3* scale, int idx = 0) { getCurrentModel()->Model::setScale(scale, idx); }
 	virtual void setRotX(float rotationAngle, int idx = 0) { getCurrentModel()->Model::setRotX(rotationAngle, idx); }
 	virtual void setRotY(float rotationAngle, int idx = 0) { getCurrentModel()->Model::setRotY(rotationAngle, idx); }

@@ -86,6 +86,7 @@ void Scenario::InitGraph(Model *main) {
 	boat->setSpeedMult(1.5f);
 	boat->setScale(&boatScale);
 	boat->setNextRotY(180);
+	boat->setTerrain(this->terreno);
 	this->vehicle = boat;
 	ourModel.emplace_back(boat);
 
@@ -178,7 +179,7 @@ void Scenario::InitGraph(Model *main) {
 	// -------------------------------
 	// Letrero Bienvenida
 	float y_sign = terreno->Superficie(-140, -180) + 1;
-	billBoard.emplace_back( new Billboard((WCHAR*)L"KA/Billboards/Signs/Welcome.png", 3, 3, -140, y_sign, -180, camara->cameraDetails)
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/Welcome.png", 3, 3, -140, y_sign, -180, camara->cameraDetails)
 	);
 	// Letrero Monedas
 	y_sign = terreno->Superficie(-220, -220) + 1;
@@ -189,29 +190,155 @@ void Scenario::InitGraph(Model *main) {
 	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF1.png", 3, 3, -140, y_sign, -195, camara->cameraDetails)
 	);
 	// Letrero Fun Fact #2
-	y_sign = terreno->Superficie(240, -160) + 1;
-	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF2.png", 3, 3, 240, y_sign, -160, camara->cameraDetails)
+	y_sign = terreno->Superficie(245, -168) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF2.png", 3, 3, 245, y_sign, -168, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(185, -194) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF3.png", 3, 3, 185, y_sign, -194, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(14, 151) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF4.png", 3, 3, 14, y_sign, 151, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(-111, 259) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF5.png", 3, 3, -111, y_sign, 259, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(-189, 219) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF6.png", 3, 3, -189, y_sign, 219, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(160, 229) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/FF/FF7.png", 3, 3, 160, y_sign, 229, camara->cameraDetails)
+	);
+
+
+	y_sign = terreno->Superficie(216, -197) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/letreroAGMX.png", 3, 3, 216, y_sign, -197, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(-16, 152) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/letreroCNT.png", 3, 3, -16, y_sign, 152, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(-258, 223) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/letreroESTATUALIB.png", 3, 3, -258, y_sign, 223, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(140, 322) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/letreroniagara1.png", 3, 3, 140, y_sign, 322, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(203, -242) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/piramideletrero.png", 3, 3, 203, y_sign, -242, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(8, 15) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/pista1CN.png", 3, 3, 8, y_sign, 15, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(203, -130) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/pista1mex.png", 3, 3, 203, y_sign, -130, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(-53, 226) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/pistacataratas.png", 3, 3, -53, y_sign, 226, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(220, -120) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/pistamex2.png", 3, 3, 220, y_sign, -120, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(-126, 181) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/pistaUSA1.png", 3, 3, -126, y_sign, 181, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(185, -194) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/SignCoin.png", 3, 3, 185, y_sign, -194, camara->cameraDetails)
+	);
+
+	y_sign = terreno->Superficie(185, -194) + 1;
+	billBoard.emplace_back(new Billboard((WCHAR*)L"KA/Billboards/Signs/Welcome.png", 3, 3, 185, y_sign, -194, camara->cameraDetails)
 	);
 
 	// árbol 1
 	float y_tree = terreno->Superficie(10, 15);
-	Billboard* arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree1.png", 12, 12, 10, y_tree+5, 15, camara->cameraDetails);
+	Billboard* arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree1.png", 12, 12, 10, y_tree + 5, 15, camara->cameraDetails);
 	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(49, 144);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree2.png", 12, 12, 49, y_tree + 5, 144, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(-290, 264);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree3.png", 12, 12, -290, y_tree + 5, 264, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(106, -213);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree4.png", 12, 12, 106, y_tree + 5, -213, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(211, -164);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree5.png", 12, 12, 211, y_tree + 5, -164, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
 	// árbol 2
 	y_tree = terreno->Superficie(22, -14);
-	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree2.png", 12, 12, 22, y_tree+5, -14, camara->cameraDetails);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree2.png", 12, 12, 22, y_tree + 5, -14, camara->cameraDetails);
 	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(117, 138);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree1.png", 12, 12, 117, y_tree + 5, 138, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(-214, 302);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree3.png", 12, 12, -214, y_tree + 5, 302, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(111, -256);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree2.png", 12, 12, 111, y_tree + 5, -256, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(252, -121);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree5.png", 12, 12, 252, y_tree + 5, -121, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+
 	// árbol 3
 	y_tree = terreno->Superficie(-5, -15);
-	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree3.png", 12, 12, -5, y_tree+5, -15, camara->cameraDetails);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree3.png", 12, 12, -5, y_tree + 5, -15, camara->cameraDetails);
 	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(59, 90);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree4.png", 12, 12, 59, y_tree + 5, 90, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(208, -278);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree3.png", 12, 12, 208, y_tree + 5, -278, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(285, -136);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree3.png", 12, 12, 285, y_tree + 5, -136, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
 	// árbol 4
 	y_tree = terreno->Superficie(-15, 0);
-	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree4.png", 12, 12, -15, y_tree+5, 0, camara->cameraDetails);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree4.png", 12, 12, -15, y_tree + 5, 0, camara->cameraDetails);
 	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(237, -259);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree4.png", 12, 12, 237, y_tree + 5, -259, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
 	// árbol 5
 	y_tree = terreno->Superficie(0, 5);
-	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree5.png", 12, 12, 0, y_tree+5, 5, camara->cameraDetails);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree5.png", 12, 12, 0, y_tree + 5, 5, camara->cameraDetails);
+	billBoard.emplace_back(arbol);
+
+	y_tree = terreno->Superficie(218, -219);
+	arbol = new Billboard((WCHAR*)L"KA/Billboards/Trees/Tree5.png", 12, 12, 218, y_tree + 5, -219, camara->cameraDetails);
 	billBoard.emplace_back(arbol);
 	
 
@@ -619,9 +746,10 @@ Scene* Scenario::Render() {
 		animacion = animacion + (1 * gameTime.deltaTime/100);
 	}
 	Axolotl* axo = getMainAxolotl();
+	glm::vec3 axopos = getActivePlayerPosition();
 	if (axo) {
 		axo->updateOxygenByPosition(gameTime.deltaTime/100);
-		axo->updateLocatorPosition();
+		axo->updateLocatorPosition(axopos);
 	}
 	for (auto& m : ourModel) {
 		Coin* c = dynamic_cast<Coin*>(m);

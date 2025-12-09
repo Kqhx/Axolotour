@@ -1,4 +1,47 @@
 #include "Vehicle.h"
+#include "../Terreno.h"
+
+void Vehicle::setTerrain(Terreno* t) {
+    terrain = t;
+}
+
+void Vehicle::setNextTranslate(glm::vec3* translate, int idx) {
+
+    if (isActive && terrain) {
+        glm::vec3 fixed = *translate;
+
+        // altura real del terreno en esa X,Z
+        float terrY = terrain->Superficie(fixed.x, fixed.z);
+
+        // altura mínima para flotar
+        float boatY = 11.0f;
+
+        if (terrY > boatY)
+            boatY = terrY;
+
+        fixed.y = boatY;
+
+        getCurrentModel()->Model::setNextTranslate(&fixed, idx);
+        return;
+    }
+
+    getCurrentModel()->Model::setNextTranslate(translate, idx);
+}
+
+void Vehicle::setTranslate(glm::vec3* translate, int idx) {
+    if (isActive && terrain) {
+        glm::vec3 fixed = *translate;
+        float terrY = terrain->Superficie(fixed.x, fixed.z);
+        float boatY = 11.0f;
+        if (terrY > boatY) boatY = terrY;
+        fixed.y = boatY;
+        getCurrentModel()->Model::setTranslate(&fixed, idx);
+        return;
+    }
+    else {
+        getCurrentModel()->Model::setTranslate(translate, idx);
+    }
+}
 
 void Vehicle::vehicleEnter(Axolotl* axo) {
     if (!isMountable || isActive) return;
@@ -30,7 +73,7 @@ void Vehicle::vehicleExit(Axolotl* axo) {
 
     // pos donde se baja
     glm::vec3 pos = *mountedModel->getTranslate();
-    pos.y += 2.0f;
+    pos.y -= 0.25f;
 
     // mostrar jugador
     axo->setTranslate(&pos);

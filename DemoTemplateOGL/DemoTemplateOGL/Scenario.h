@@ -64,6 +64,17 @@ public:
 	void setAngulo(float angulo);
 	SkyDome* getSky();
 	Terreno* getTerreno();
+	glm::vec3 getActivePlayerPosition() {
+		Vehicle* v = getVehicle();
+
+		if (v && v->getIsActive()) {
+			return *v->getTranslate();
+		}
+
+		Axolotl* a = getMainAxolotl();
+		return *a->getTranslate();
+	}
+
 	int update(GameActions* actions = NULL);
     ~Scenario();
 };

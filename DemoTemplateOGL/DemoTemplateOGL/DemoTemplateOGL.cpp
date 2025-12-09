@@ -149,7 +149,7 @@ int startGameEngine(void *ptrMsg){
     Axolotl* model = new Axolotl("KA/Models/Axo/Axolotlalli.fbx", translate, camera);
     model->setTranslate(&translate);
     camera->setFront(v);
-    camera->setCharacterHeight(1.25);
+    camera->setCharacterHeight(1.35);
     scale = glm::vec3(1.5f, 1.5f, 1.5f);	// it's a bit too big for our scene, so scale it down
     model->setScale(&scale);
     model->setTranslate(&translate);
